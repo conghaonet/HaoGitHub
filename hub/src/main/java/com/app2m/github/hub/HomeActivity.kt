@@ -51,17 +51,20 @@ class HomeActivity: AppCompatActivity() {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
+        toast("onPostCreate")
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
+        toast("onConfigurationChanged")
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        toast("onCreateOptionsMenu")
         return super.onCreateOptionsMenu(menu)
     }
 
