@@ -1,7 +1,9 @@
 android {
+/*
     dataBinding {
         enabled = true
     }
+*/
 
     compileSdkVersion 28
 //    buildToolsVersion '28.0.2'
