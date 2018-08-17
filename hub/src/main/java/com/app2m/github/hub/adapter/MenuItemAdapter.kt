@@ -24,25 +24,40 @@ class MenuItemAdapter(private val ctx: Context, private val items: List<String>)
             val itemUI = MenuItemUI()
             view = itemUI.createView(ankoContext)
             viewHolder = ViewHolder()
+            viewHolder.itemLayout = itemUI.itemLayout
             viewHolder.menuName = itemUI.name
         }
         viewHolder.menuName?.text = getItem(position)
+        viewHolder.itemLayout?.setOnClickListener {
+            itemClickListener?.onClickItem(position)
+        }
         return view
     }
 
     inner class ViewHolder {
+        var itemLayout : ViewGroup? = null
         var menuName : TextView? = null
+    }
+
+    fun setOnItemClickListener(listener: ItemClickListener) {
+        itemClickListener = listener
+    }
+    private var itemClickListener: ItemClickListener? = null
+    interface ItemClickListener {
+        fun onClickItem(position: Int)
     }
 }
 
 class MenuItemUI : AnkoComponent<MenuItemAdapter>, AnkoLogger {
+    lateinit var itemLayout : ViewGroup
     lateinit var name: TextView
     override fun createView(ui: AnkoContext<MenuItemAdapter>) = ui.apply {
-        linearLayout {
+        itemLayout = linearLayout {
             orientation = LinearLayout.HORIZONTAL
             var myLayoutParams : AbsListView.LayoutParams = AbsListView.LayoutParams(matchParent, wrapContent)
             layoutParams = myLayoutParams
             backgroundColor =  0xFFFFFFFF.toInt()
+            isClickable = true
             name = textView {
                 text ="menu name"
                 textSize = 18f
