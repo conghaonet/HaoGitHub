@@ -56,7 +56,7 @@ class MenuItemUI : AnkoComponent<MenuItemAdapter>, AnkoLogger {
             orientation = LinearLayout.HORIZONTAL
             var myLayoutParams : AbsListView.LayoutParams = AbsListView.LayoutParams(matchParent, wrapContent)
             layoutParams = myLayoutParams
-            backgroundColor =  0xFFFFFFFF.toInt()
+            backgroundColor = 0xFFFFFFFF.toInt()
             isClickable = true
             name = textView {
                 text ="menu name"
