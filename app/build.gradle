@@ -8,6 +8,7 @@ apply from: "../configs/android.gradle"
 android {
     defaultConfig {
         applicationId "com.app2m.github"
+        multiDexEnabled true
     }
     dexOptions {
         javaMaxHeapSize "4g"
@@ -28,6 +29,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 //    kapt "com.android.databinding:compiler:$gradle_plugin_version"
+    implementation 'com.android.support:multidex:1.0.3'
 
     implementation "com.android.support:appcompat-v7:$android_support_version"
 
