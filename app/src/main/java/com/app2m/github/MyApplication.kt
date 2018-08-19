@@ -2,6 +2,9 @@ package com.app2m.github
 
 import android.content.res.Configuration
 import android.support.multidex.MultiDexApplication
+import android.os.StrictMode
+
+
 
 class MyApplication : MultiDexApplication() {
     override fun onCreate() {
