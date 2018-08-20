@@ -23,14 +23,10 @@ import com.app2m.github.network.schedule
 import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class HomeActivity: AppCompatActivity() {
-    val menuItems = listOf("A","B","C")
     private lateinit var homeActivityUI: HomeActivityUI
     lateinit var mDrawerToggle : ActionBarDrawerToggle
-    lateinit var menuAdapter: MenuItemAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.hub_activity_main)
-        menuAdapter = MenuItemAdapter(this, menuItems)
         homeActivityUI = HomeActivityUI()
         homeActivityUI.setContentView(this)
         setSupportActionBar(homeActivityUI.toolbar)
@@ -46,13 +42,6 @@ class HomeActivity: AppCompatActivity() {
         //手动控制drawerLayout的显示/隐藏
 //        homeActivityUI.drawerLayout.closeDrawer(Gravity.START)
 //        homeActivityUI.drawerLayout.openDrawer(Gravity.START)
-
-        menuAdapter.setOnItemClickListener(object : MenuItemAdapter.ItemClickListener {
-            override fun onClickItem(position: Int) {
-                toast("position = $position")
-                homeActivityUI.drawerLayout.closeDrawer(Gravity.START)
-            }
-        })
 
         homeActivityUI.navigationView.setNavigationItemSelectedListener {
             when(it.itemId) {
@@ -75,6 +64,9 @@ class HomeActivity: AppCompatActivity() {
                 it.printStackTrace()
             }
         )
+    }
+    fun openLoginActivity() {
+        startActivity<LoginActivity>()
     }
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
@@ -114,13 +106,16 @@ class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {
     lateinit var toolbar : Toolbar
     lateinit var drawerLayout: DrawerLayout
     lateinit var navigationView: NavigationView
+    lateinit var mUI: AnkoContext<HomeActivity>
     private fun getHeaderView(view : View) : View {
         return view.context.verticalLayout {
             view.lparams(width = matchParent, height = wrapContent)
             backgroundColor = 0x3300FF00.toInt()
             gravity = Gravity.CENTER_HORIZONTAL
-            button("hello") {
-
+            button(R.string.hub_menu_login_button) {
+                onClick {
+                    mUI.owner.openLoginActivity()
+                }
             }.lparams(width = wrapContent, height = wrapContent)
             textView {
                 text = "Header View"
@@ -128,6 +123,7 @@ class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {
         }
     }
     override fun createView(ui: AnkoContext<HomeActivity>) = ui.apply {
+        mUI = ui
         drawerLayout = drawerLayout {
             lparams(width = matchParent, height = matchParent)
             verticalLayout {
@@ -166,15 +162,6 @@ class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {
             }.lparams(width = dip(240), height = matchParent) {
                 gravity = Gravity.START
             }
-/*
-            //已改为用navigationView实现侧边栏
-            listView {
-                backgroundColor = Color.WHITE
-                adapter = owner.menuAdapter
-            }.lparams(width = dip(240), height = matchParent) {
-                gravity = Gravity.START
-            }
-*/
         }
     }.view
 
