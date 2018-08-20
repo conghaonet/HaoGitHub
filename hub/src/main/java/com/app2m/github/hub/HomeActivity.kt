@@ -11,22 +11,16 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
 import com.app2m.github.hub.adapter.MenuItemAdapter
 import com.app2m.github.hub.ext.supportToolbar
 import com.app2m.github.network.GitHubService
 import com.app2m.github.network.RequestClient
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.design_navigation_item_header.view.*
 import org.jetbrains.anko.*
-import org.jetbrains.anko.design._BottomNavigationView
 import org.jetbrains.anko.design.navigationView
-import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.support.v4.drawerLayout
-import android.os.StrictMode
-import io.reactivex.rxkotlin.toObservable
-
+import com.app2m.github.network.schedule
+import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class HomeActivity: AppCompatActivity() {
     val menuItems = listOf("A","B","C")
@@ -72,37 +66,15 @@ class HomeActivity: AppCompatActivity() {
         }
     }
     fun requestGitHubApi() {
-/*
-        val list = listOf("Alpha", "Beta", "Gamma", "Delta", "Epsilon")
-        list.toObservable() // extension function for Iterables
-                .filter { it.length >= 5 }
-                .subscribeBy(  // named arguments for lambda Subscribers
-                        onNext = {
-                            Thread.sleep(5000)
-                            toast(it)
-                        },
-                        onError =  { it.printStackTrace() },
-                        onComplete = { toast("Done!") }
-                )
-*/
-
-//        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-//        StrictMode.setThreadPolicy(policy)
         val apiService = RequestClient.buildService(GitHubService::class.java)
-        val observable = apiService.getGitHubApi()
-        observable.subscribeBy(
+        apiService.getGitHubApi().schedule().subscribeBy (
             onNext = {
-//                toast(it.toString())
-                toast("onNext!")
+                toast(it.toString())
             },
             onError =  {
                 it.printStackTrace()
-            },
-            onComplete = {
-                toast("onComplete!")
             }
         )
-
     }
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
@@ -179,12 +151,7 @@ class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {
                 }.lparams(width = wrapContent, height = wrapContent)
                 button {
                     text = "test github api"
-/*
                     onClick {
-                        owner.requestGitHubApi()
-                    }
-*/
-                    setOnClickListener {
                         owner.requestGitHubApi()
                     }
                 }

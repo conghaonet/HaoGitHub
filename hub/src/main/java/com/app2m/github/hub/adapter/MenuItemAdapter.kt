@@ -26,7 +26,9 @@ class MenuItemAdapter(private val ctx: Context, private val items: List<String>)
             viewHolder = ViewHolder()
             viewHolder.itemLayout = itemUI.itemLayout
             viewHolder.menuName = itemUI.name
+            view.tag = viewHolder
         }
+        viewHolder = view.tag as ViewHolder
         viewHolder.menuName?.text = getItem(position)
         viewHolder.itemLayout?.setOnClickListener {
             itemClickListener?.onClickItem(position)

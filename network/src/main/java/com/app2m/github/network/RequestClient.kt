@@ -43,14 +43,5 @@ class RequestClient {
                     .client(MY_HTTP_CLIENT)
                     .build()
         }
-
-/*
-        fun <T> ioToMainThread(o: Observable<T>, s: Subscriber<T>) {
-            o.subscribeOn(Schedulers.io())
-                    .unsubscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeBy(s)
-        }
-*/
     }
 }
