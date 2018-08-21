@@ -12,6 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.app2m.github.hub.adapter.MenuItemAdapter
+import com.app2m.github.hub.base.BaseActivity
 import com.app2m.github.hub.ext.supportToolbar
 import com.app2m.github.network.GitHubService
 import com.app2m.github.network.RequestClient
@@ -22,7 +23,7 @@ import org.jetbrains.anko.support.v4.drawerLayout
 import com.app2m.github.network.schedule
 import org.jetbrains.anko.sdk25.coroutines.onClick
 
-class HomeActivity: AppCompatActivity() {
+class HomeActivity: BaseActivity() {
     private lateinit var homeActivityUI: HomeActivityUI
     lateinit var mDrawerToggle : ActionBarDrawerToggle
     override fun onCreate(savedInstanceState: Bundle?) {

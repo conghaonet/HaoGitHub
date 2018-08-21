@@ -29,7 +29,7 @@ class MainActivityUI<T> : AnkoComponent<T>, AnkoLogger {
         nestedScrollView {
             lparams(width = matchParent, height = matchParent)
             verticalLayout {
-                button("aaa") {
+                button("GitHub Home") {
                     onClick {
                         startActivity<HomeActivity>()
                     }
