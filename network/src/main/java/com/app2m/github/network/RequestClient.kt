@@ -15,7 +15,7 @@ class RequestClient {
                     .connectTimeout(10, TimeUnit.SECONDS)
                     .readTimeout(30, TimeUnit.SECONDS)
                     .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
-//                    .addInterceptor(SlpRequestInterceptor())
+                    .addInterceptor(GitHubInterceptor())
                     .build()
         }
 
