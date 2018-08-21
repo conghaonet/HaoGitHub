@@ -5,6 +5,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class UsersOwner(var login: String = "",
-                      val id: Long = 0,
+                      var id: Long = 0,
                       var node_id: String = "",
                       var avatar_url:String = "") : Parcelable

@@ -9,10 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.app2m.github.hub.base.BaseActivity
-import com.app2m.github.network.GitHubService
-import com.app2m.github.network.RequestClient
-import com.app2m.github.network.getBasicCredentials
-import com.app2m.github.network.schedule
+import com.app2m.github.network.*
 import io.reactivex.rxkotlin.subscribeBy
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.textInputLayout
@@ -43,6 +40,11 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun attemptLogin() {
+        var prefUsername : String by Preference(this, PrefProperty.USERNAME, "")
+        var prefPassword : String by Preference(this, PrefProperty.PASSWORD, "")
+        var prefBasicAuth : String by Preference(this, PrefProperty.AUTH_BASIC, "")
+        var prefLoginSuccessful : Boolean by Preference(this, PrefProperty.LOGIN_SUCCESSFUL, false)
+
         if(mUI.etEmail.text.isNullOrBlank()) {
             mUI.etEmail.error = getString(R.string.hub_error_field_required)
             mUI.etEmail.requestFocus()
@@ -53,9 +55,13 @@ class LoginActivity : BaseActivity() {
             mUI.etPassword.requestFocus()
             return
         }
-        val base = getBasicCredentials(mUI.etEmail.text, mUI.etPassword.text)
+        prefUsername = mUI.etEmail.text.toString()
+        prefPassword = mUI.etPassword.text.toString()
+        prefBasicAuth = getBasicCredentials(prefUsername, prefPassword)
+        prefLoginSuccessful = false
+
         val apiService = RequestClient.buildService(GitHubService::class.java)
-        apiService.getUsersOwner(base, "conghaonet").schedule().subscribeBy (
+        apiService.getUsersOwner(prefUsername).schedule().subscribeBy (
                 onNext = {
                     toast(it.toString())
                 },
