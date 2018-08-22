@@ -1,9 +1,7 @@
 package com.app2m.github.hub
 
 import android.os.Bundle
-import android.text.Editable
 import android.text.InputType
-import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
@@ -62,9 +60,6 @@ class LoginActivity : BaseActivity(), AnkoLogger {
         prefTokenAuth = ""
         prefBasicAuth = getBasicCredentials(prefUsername, prefPassword)
         prefLoginSuccessful = false
-        info("username=$prefUsername")
-        info("password=$prefPassword")
-        info("basic=$prefBasicAuth")
         val apiService = RequestClient.buildService(GitHubService::class.java)
         apiService.postAuthorizations().schedule().subscribeBy (
                 onNext = {
@@ -73,7 +68,8 @@ class LoginActivity : BaseActivity(), AnkoLogger {
                     prefLoginSuccessful = true
                 },
                 onError =  {
-                    it.printStackTrace()
+                    var errResponse = getErrResponse(it)
+                    info(errResponse)
                 }
         )
     }
