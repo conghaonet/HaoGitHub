@@ -3,6 +3,10 @@ package com.app2m.github.network
 import android.content.Context
 
 const val BASE_API = "https://api.github.com/"
+const val API_VERSION = "application/vnd.github.v3+json"
+const val REQUEST_MEDIA_TYPE = "application"
+const val REQUEST_MEDIA_SUB_TYPE = "json"
+const val CONTENT_TYPE = "$REQUEST_MEDIA_TYPE/$REQUEST_MEDIA_SUB_TYPE"
 
 object GitHubOAuthApp {
     const val CLIENT_ID  = "c868cf1dc9c48103bb55"
