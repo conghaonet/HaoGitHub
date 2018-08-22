@@ -12,6 +12,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.textInputLayout
 import org.jetbrains.anko.sdk25.coroutines.onClick
+import retrofit2.HttpException
 
 /**
  * A login screen that offers login via email/password.
@@ -68,8 +69,9 @@ class LoginActivity : BaseActivity(), AnkoLogger {
                     prefLoginSuccessful = true
                 },
                 onError =  {
-                    var errResponse = getErrResponse(it)
-                    info(errResponse)
+                    if(it is HttpException) {
+                        info(it.getErrResponse())
+                    }
                 }
         )
     }

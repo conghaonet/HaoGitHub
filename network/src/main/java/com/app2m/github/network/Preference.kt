@@ -19,6 +19,7 @@ class Preference<T>(val context: Context, val name: String, val default: T) : Re
     }
 
     //利用with函数定义临时的命名空间
+    @Suppress("UNCHECKED_CAST")
     private fun<T> findPreference(name: String, default: T) : T = with(prefs) {
         val res: Any = when(default) {
             is Long -> getLong(name, default)
