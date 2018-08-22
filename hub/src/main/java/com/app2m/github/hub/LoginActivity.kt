@@ -18,7 +18,13 @@ import org.jetbrains.anko.sdk25.coroutines.onClick
 /**
  * A login screen that offers login via email/password.
  */
-class LoginActivity : BaseActivity() {
+class LoginActivity : BaseActivity(), AnkoLogger {
+    private var prefUsername : String by Preference(this, PrefProperty.USERNAME,  "")
+    private var prefPassword : String by Preference(this, PrefProperty.PASSWORD, "")
+    private var prefBasicAuth : String by Preference(this, PrefProperty.AUTH_BASIC, "")
+    private var prefTokenAuth : String by Preference(this, PrefProperty.AUTH_TOKEN, "")
+    private var prefLoginSuccessful : Boolean by Preference(this, PrefProperty.LOGIN_SUCCESSFUL, false)
+
     private val mUI: LoginActivityUI by lazy {
         LoginActivityUI()
     }
@@ -40,10 +46,6 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun attemptLogin() {
-        var prefUsername : String by Preference(this, PrefProperty.USERNAME, "")
-        var prefPassword : String by Preference(this, PrefProperty.PASSWORD, "")
-        var prefBasicAuth : String by Preference(this, PrefProperty.AUTH_BASIC, "")
-        var prefLoginSuccessful : Boolean by Preference(this, PrefProperty.LOGIN_SUCCESSFUL, false)
 
         if(mUI.etEmail.text.isNullOrBlank()) {
             mUI.etEmail.error = getString(R.string.hub_error_field_required)
@@ -57,13 +59,18 @@ class LoginActivity : BaseActivity() {
         }
         prefUsername = mUI.etEmail.text.toString()
         prefPassword = mUI.etPassword.text.toString()
+        prefTokenAuth = ""
         prefBasicAuth = getBasicCredentials(prefUsername, prefPassword)
         prefLoginSuccessful = false
-
+        info("username=$prefUsername")
+        info("password=$prefPassword")
+        info("basic=$prefBasicAuth")
         val apiService = RequestClient.buildService(GitHubService::class.java)
-        apiService.getUsersOwner(prefUsername).schedule().subscribeBy (
+        apiService.postAuthorizations().schedule().subscribeBy (
                 onNext = {
                     toast(it.toString())
+                    prefTokenAuth = it.token
+                    prefLoginSuccessful = true
                 },
                 onError =  {
                     it.printStackTrace()

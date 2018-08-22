@@ -1,12 +1,11 @@
 package com.app2m.github.network
 
 import com.app2m.github.network.data.Authorization
+import com.app2m.github.network.data.AuthorizationBody
 import com.app2m.github.network.data.GitHubApi
 import com.app2m.github.network.data.UsersOwner
 import io.reactivex.Observable
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface GitHubService {
     @GET("/")
@@ -15,6 +14,6 @@ interface GitHubService {
     @GET("users/{owner}")
     fun getUsersOwner(@Path("owner") owner : String) : Observable<UsersOwner>
 
-    @GET("authorizations")
-    fun getAuthorizations() : Observable<List<Authorization>>
+    @POST("authorizations")
+    fun postAuthorizations(@Body body : AuthorizationBody = AuthorizationBody()) : Observable<Authorization>
 }

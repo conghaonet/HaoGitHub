@@ -43,4 +43,5 @@ dependencies {
     implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
 
     implementation project(':hub')
+    implementation project(path: ':network')
 }
