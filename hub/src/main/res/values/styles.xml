@@ -1,28 +1,27 @@
 <resources>
-    <!-- toolbar菜单样式 -->
-    <style name="ToolbarTheme" parent="Base.ThemeOverlay.AppCompat.ActionBar">
-        <item name="actionMenuTextColor">@android:color/white</item>
-        <item name="android:titleTextColor">@style/ToolBarTitleStyle</item>
-    </style>
-    <style name="ToolBarTitleStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">20dp</item>
-        <item name="android:textColor">@android:color/holo_red_dark</item>
+    <!-- Toolbar菜单样式 -->
+    <style name="MyToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!--Toolbar背景色，如果定义该属性将一同修改popupTheme的背景色，即使定义了popupTheme的背景色也会无效-->
+        <!--<item name="android:background">@color/colorPrimary</item>-->
+        <item name="actionOverflowMenuStyle">@style/MyOverflowMenuStyle</item>
+        <item name="actionOverflowButtonStyle">@style/MyActionButtonOverflowStyle</item>
     </style>
 
-<!--
-    <style name="Base.V7.Widget.AppCompat.Toolbar" parent="android:Widget">
-        <item name="titleTextAppearance">@style/TextAppearance.Widget.AppCompat.Toolbar.Title</item>
-        <item name="subtitleTextAppearance">@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle</item>
-        <item name="android:minHeight">?attr/actionBarSize</item>
-        <item name="titleMargin">4dp</item>
-        <item name="maxButtonHeight">@dimen/abc_action_bar_default_height_material</item>
-        <item name="buttonGravity">top</item>
-        <item name="collapseIcon">?attr/homeAsUpIndicator</item>
-        <item name="collapseContentDescription">@string/abc_toolbar_collapse_description</item>
-        <item name="contentInsetStart">16dp</item>
-        <item name="contentInsetStartWithNavigation">@dimen/abc_action_bar_content_inset_with_nav</item>
-        <item name="android:paddingLeft">@dimen/abc_action_bar_default_padding_start_material</item>
-        <item name="android:paddingRight">@dimen/abc_action_bar_default_padding_end_material</item>
+    <!--ActionBar弹出菜单样式-->
+    <style name="MyOverflowMenuStyle" parent="@style/Widget.AppCompat.PopupMenu.Overflow">
+        <!-- 是否覆盖锚点，默认为true，即盖住Toolbar -->
+        <item name="overlapAnchor">false</item>
+        <!-- 弹出层背景颜色 -->
+        <item name="android:popupBackground">@color/colorPrimaryDark</item>
+        <!-- 弹出层垂直方向上的偏移，即在竖直方向上距离Toolbar的距离，值为负则会盖住Toolbar -->
+        <item name="android:dropDownVerticalOffset">5dp</item>
+        <!-- 弹出层水平方向上的偏移，即距离屏幕左边的距离，负值会导致右边出现空隙 -->
+        <item name="android:dropDownHorizontalOffset">0dp</item>
     </style>
--->
+
+    <!--ActionBar右侧三个点的样式-->
+    <style name="MyActionButtonOverflowStyle" parent="@style/Widget.AppCompat.ActionButton.Overflow">
+        <!--设置三个点的背景色-->
+        <item name="android:background">@color/colorAccent</item>
+    </style>
 </resources>

@@ -7,6 +7,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!--已在hub/res/values/styles.xml中定义actionOverflowMenuStyle-->
+        <!--<item name="actionOverflowMenuStyle">@style/MyOverflowMenuStyle</item>-->
     </style>
     <style name="AppTheme" parent="AppBaseTheme">
     </style>

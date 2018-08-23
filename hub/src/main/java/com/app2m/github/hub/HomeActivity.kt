@@ -1,6 +1,7 @@
 package com.app2m.github.hub
 
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Paint
 import android.support.v7.app.AppCompatActivity
@@ -9,6 +10,7 @@ import android.support.design.widget.NavigationView
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.appcompat.R.attr.theme
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.Menu
@@ -133,17 +135,17 @@ class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {
         drawerLayout = drawerLayout {
             lparams(width = matchParent, height = matchParent)
             verticalLayout {
-                toolbar = supportToolbar {
-                    //设置左间距为0，否则左边始终会有间距
-//                    contentInsetStartWithNavigation = dip(0)
-                    title = "Toolbar"
+                toolbar = themeSupportToolbar(R.style.MyToolbarStyle) {
+                    // 设置toolbar的title与左边导航图标之间的间距为0，否则左边始终会有间距，
+                    // 或者在dimens.xml中定义：<dimen name="abc_action_bar_content_inset_with_nav" tools:override="true">0dp</dimen>
+                    // contentInsetStartWithNavigation = dip(0)
                     backgroundColorResource = R.color.colorPrimary
-                    setTitleTextColor(Color.WHITE)
+                    title = ""
                     textView {
                         var myLayoutParams = Toolbar.LayoutParams(wrapContent, wrapContent)
                         myLayoutParams.gravity = Gravity.CENTER
                         layoutParams = myLayoutParams
-                        text = "自定义标题剧中"
+                        textResource = R.string.app_name
                         textSize = 18f
                         textColor = 0xFFFFFFFF.toInt()
                     }
