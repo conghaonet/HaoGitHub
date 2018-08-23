@@ -3,6 +3,7 @@ package com.app2m.github.hub
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.os.LocaleList
 import android.text.InputType
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -82,28 +83,7 @@ class LoginActivity : BaseActivity(), AnkoLogger {
                 }
         )
     }
-    private fun switch2Chinese() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            config.setLocale(Locale.SIMPLIFIED_CHINESE)
-            createConfigurationContext(config)
-        } else {
-            config.locale = Locale.SIMPLIFIED_CHINESE
-            resources.updateConfiguration(config, resources.displayMetrics)
-        }
-        recreate()
-//        onCreate(null)
-    }
-    private fun switch2English() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            config.setLocale(Locale.ENGLISH)
-            createConfigurationContext(config)
-        } else {
-            config.locale = Locale.ENGLISH
-            resources.updateConfiguration(config, resources.displayMetrics)
-        }
-        recreate()
-//        onCreate(null)
-    }
+
 /*
     private fun attemptLogin() {
         // Reset errors.
@@ -181,16 +161,6 @@ class LoginActivityUI: AnkoComponent<LoginActivity> {
                             }
                             false
                         })
-                    }
-                }.lparams(matchParent, wrapContent)
-                button ("简体中文"){
-                    onClick {
-                        owner.switch2Chinese()
-                    }
-                }.lparams(matchParent, wrapContent)
-                button ("English"){
-                    onClick {
-                        owner.switch2English()
                     }
                 }.lparams(matchParent, wrapContent)
                 btnSignIn = button (R.string.hub_action_sign_in){

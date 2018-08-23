@@ -1,9 +1,12 @@
 package com.app2m.github.hub
 
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.Paint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.content.ContextCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
@@ -14,6 +17,7 @@ import android.view.View
 import com.app2m.github.hub.adapter.MenuItemAdapter
 import com.app2m.github.hub.base.BaseActivity
 import com.app2m.github.hub.ext.supportToolbar
+import com.app2m.github.hub.ext.themeSupportToolbar
 import com.app2m.github.network.GitHubService
 import com.app2m.github.network.RequestClient
 import io.reactivex.rxkotlin.subscribeBy
@@ -21,6 +25,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.design.navigationView
 import org.jetbrains.anko.support.v4.drawerLayout
 import com.app2m.github.network.schedule
+import org.jetbrains.anko.custom.style
 import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class HomeActivity: BaseActivity() {
@@ -130,18 +135,19 @@ class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {
             verticalLayout {
                 toolbar = supportToolbar {
                     //设置左间距为0，否则左边始终会有间距
-                    contentInsetStartWithNavigation = dip(0)
-                    title = ""
+//                    contentInsetStartWithNavigation = dip(0)
+                    title = "Toolbar"
                     backgroundColorResource = R.color.colorPrimary
+                    setTitleTextColor(Color.WHITE)
                     textView {
                         var myLayoutParams = Toolbar.LayoutParams(wrapContent, wrapContent)
                         myLayoutParams.gravity = Gravity.CENTER
                         layoutParams = myLayoutParams
-                        text = "自定义标题"
+                        text = "自定义标题剧中"
                         textSize = 18f
                         textColor = 0xFFFFFFFF.toInt()
                     }
-                }.lparams(width = matchParent, height = dip(50))
+                }.lparams(matchParent)
                 textView {
                     text = "content layout"
                     textSize = 24f
