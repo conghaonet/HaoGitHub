@@ -4,6 +4,8 @@ import com.app2m.github.network.data.ErrResponse
 import com.google.gson.Gson
 import okhttp3.*
 import okhttp3.internal.http.HttpHeaders
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 
 class GitHubInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -32,9 +34,10 @@ class GitHubInterceptor : Interceptor {
             } else if(bodyEncoded(response.headers())) {
                 //HTTP (encoded body omitted)
             } else {
-                val strBody = getBodyContent(response.body())
-                errResponse.body = Gson().fromJson(strBody, ErrResponse.Body::class.java)
-//                AnkoLogger<GitHubInterceptor>().info("error body = $strBody")
+                response.body()?.let {
+                    errResponse.body = Gson().fromJson(it.getContent(), ErrResponse.Body::class.java)
+                    AnkoLogger<GitHubInterceptor>().info("ErrResponse = $errResponse")
+                }
             }
         }
         return response

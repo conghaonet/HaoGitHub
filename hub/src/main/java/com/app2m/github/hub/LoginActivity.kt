@@ -1,5 +1,7 @@
 package com.app2m.github.hub
 
+import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.view.inputmethod.EditorInfo
@@ -13,6 +15,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.design.textInputLayout
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import retrofit2.HttpException
+import java.util.*
 
 /**
  * A login screen that offers login via email/password.
@@ -23,6 +26,10 @@ class LoginActivity : BaseActivity(), AnkoLogger {
     private var prefBasicAuth : String by Preference(this, PrefProperty.AUTH_BASIC, "")
     private var prefTokenAuth : String by Preference(this, PrefProperty.AUTH_TOKEN, "")
     private var prefLoginSuccessful : Boolean by Preference(this, PrefProperty.LOGIN_SUCCESSFUL, false)
+    // 获得设置对象
+    private val config: Configuration by lazy {
+        resources.configuration
+    }
 
     private val mUI: LoginActivityUI by lazy {
         LoginActivityUI()
@@ -46,9 +53,9 @@ class LoginActivity : BaseActivity(), AnkoLogger {
 
     private fun attemptLogin() {
 
-        if(mUI.etEmail.text.isNullOrBlank()) {
-            mUI.etEmail.error = getString(R.string.hub_error_field_required)
-            mUI.etEmail.requestFocus()
+        if(mUI.etUsername.text.isNullOrBlank()) {
+            mUI.etUsername.error = getString(R.string.hub_error_field_required)
+            mUI.etUsername.requestFocus()
             return
         }
         if(mUI.etPassword.text.isNullOrBlank()) {
@@ -56,7 +63,7 @@ class LoginActivity : BaseActivity(), AnkoLogger {
             mUI.etPassword.requestFocus()
             return
         }
-        prefUsername = mUI.etEmail.text.toString()
+        prefUsername = mUI.etUsername.text.toString()
         prefPassword = mUI.etPassword.text.toString()
         prefTokenAuth = ""
         prefBasicAuth = getBasicCredentials(prefUsername, prefPassword)
@@ -64,16 +71,38 @@ class LoginActivity : BaseActivity(), AnkoLogger {
         val apiService = RequestClient.buildService(GitHubService::class.java)
         apiService.postAuthorizations().schedule().subscribeBy (
                 onNext = {
-                    toast(it.toString())
                     prefTokenAuth = it.token
                     prefLoginSuccessful = true
+                    toast(R.string.hub_toast_login_successful)
                 },
                 onError =  {
                     if(it is HttpException) {
-                        info(it.getErrResponse())
+                        toast("${it.getErrResponse()?.body?.message}")
                     }
                 }
         )
+    }
+    private fun switch2Chinese() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            config.setLocale(Locale.SIMPLIFIED_CHINESE)
+            createConfigurationContext(config)
+        } else {
+            config.locale = Locale.SIMPLIFIED_CHINESE
+            resources.updateConfiguration(config, resources.displayMetrics)
+        }
+        recreate()
+//        onCreate(null)
+    }
+    private fun switch2English() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            config.setLocale(Locale.ENGLISH)
+            createConfigurationContext(config)
+        } else {
+            config.locale = Locale.ENGLISH
+            resources.updateConfiguration(config, resources.displayMetrics)
+        }
+        recreate()
+//        onCreate(null)
     }
 /*
     private fun attemptLogin() {
@@ -115,7 +144,7 @@ class LoginActivity : BaseActivity(), AnkoLogger {
     }
 */
 class LoginActivityUI: AnkoComponent<LoginActivity> {
-    lateinit var etEmail: EditText
+    lateinit var etUsername: EditText
     lateinit var etPassword: EditText
     lateinit var btnSignIn: Button
     private val customStyle = { view : Any ->
@@ -133,8 +162,8 @@ class LoginActivityUI: AnkoComponent<LoginActivity> {
             lparams(matchParent, matchParent)
             verticalLayout {
                 textInputLayout {
-                    etEmail = editText {
-                        hintResource = R.string.hub_prompt_email
+                    etUsername = editText {
+                        hintResource = R.string.hub_prompt_username
                         inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
                         setText("conghaonet@gmail.com")
                     }
@@ -154,7 +183,17 @@ class LoginActivityUI: AnkoComponent<LoginActivity> {
                         })
                     }
                 }.lparams(matchParent, wrapContent)
-                btnSignIn = button (R.string.action_sign_in){
+                button ("简体中文"){
+                    onClick {
+                        owner.switch2Chinese()
+                    }
+                }.lparams(matchParent, wrapContent)
+                button ("English"){
+                    onClick {
+                        owner.switch2English()
+                    }
+                }.lparams(matchParent, wrapContent)
+                btnSignIn = button (R.string.hub_action_sign_in){
                     onClick {
                         owner.attemptLogin()
                     }
