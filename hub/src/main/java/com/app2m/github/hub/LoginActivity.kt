@@ -22,22 +22,20 @@ import java.util.*
  * A login screen that offers login via email/password.
  */
 class LoginActivity : BaseActivity(), AnkoLogger {
+    private val apiService = RequestClient.buildService(GitHubService::class.java)
     private var prefUsername : String by Preference(this, PrefProperty.USERNAME,  "")
     private var prefPassword : String by Preference(this, PrefProperty.PASSWORD, "")
     private var prefBasicAuth : String by Preference(this, PrefProperty.AUTH_BASIC, "")
     private var prefTokenAuth : String by Preference(this, PrefProperty.AUTH_TOKEN, "")
     private var prefLoginSuccessful : Boolean by Preference(this, PrefProperty.LOGIN_SUCCESSFUL, false)
-    // 获得设置对象
-    private val config: Configuration by lazy {
-        resources.configuration
-    }
-
     private val mUI: LoginActivityUI by lazy {
         LoginActivityUI()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mUI.setContentView(this)
+        val loginId:  String by Preference(this, PrefProperty.USER_LOGIN_ID, "")
+        toast("loginId = $loginId")
 /*
         setContentView(R.layout.activity_login)
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
@@ -69,14 +67,16 @@ class LoginActivity : BaseActivity(), AnkoLogger {
         prefTokenAuth = ""
         prefBasicAuth = getBasicCredentials(prefUsername, prefPassword)
         prefLoginSuccessful = false
-        val apiService = RequestClient.buildService(GitHubService::class.java)
-        apiService.postAuthorizations().schedule().subscribeBy (
+        apiService.postAuthorizations().flatMap {
+            prefTokenAuth = it.token
+            prefLoginSuccessful = true
+            apiService.getUser()
+        }.schedule().subscribeBy(
                 onNext = {
-                    prefTokenAuth = it.token
-                    prefLoginSuccessful = true
-                    toast(R.string.hub_toast_login_successful)
-                },
-                onError =  {
+                    var loginId:  String by Preference(this, PrefProperty.USER_LOGIN_ID, "")
+                    loginId = it.login
+                    toast("login = ${it.login}, ${it.location}")
+                },onError = {
                     if(it is HttpException) {
                         toast("${it.getErrResponse()?.body?.message}")
                     }

@@ -23,6 +23,7 @@ object PrefProperty {
     const val AUTH_BASIC = "authentication_basic"
     const val AUTH_TOKEN = "authentication_token"
     const val LOGIN_SUCCESSFUL = "login_successful"
+    const val USER_LOGIN_ID = "user_login_id"
 }
 
 @SuppressLint("StaticFieldLeak")

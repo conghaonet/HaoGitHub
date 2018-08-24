@@ -1,6 +1,5 @@
 package com.app2m.github.network
 
-import com.app2m.github.network.https.Tls12SocketFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
