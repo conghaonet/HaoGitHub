@@ -1,9 +1,8 @@
 package com.app2m.github.hub
 
-import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
-import android.os.LocaleList
+import android.support.design.widget.TextInputEditText
+import android.support.design.widget.TextInputLayout
 import android.text.InputType
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -12,19 +11,19 @@ import android.widget.TextView
 import com.app2m.github.hub.base.BaseActivity
 import com.app2m.github.network.*
 import io.reactivex.rxkotlin.subscribeBy
+import okhttp3.Credentials
 import org.jetbrains.anko.*
+import org.jetbrains.anko.design.textInputEditText
 import org.jetbrains.anko.design.textInputLayout
 import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.sdk25.coroutines.textChangedListener
 import retrofit2.HttpException
-import java.util.*
 
 /**
  * A login screen that offers login via email/password.
  */
 class LoginActivity : BaseActivity(), AnkoLogger {
     private val apiService = RequestClient.buildService(GitHubService::class.java)
-    private var prefUsername : String by Preference(this, PrefProperty.USERNAME,  "")
-    private var prefPassword : String by Preference(this, PrefProperty.PASSWORD, "")
     private var prefBasicAuth : String by Preference(this, PrefProperty.AUTH_BASIC, "")
     private var prefTokenAuth : String by Preference(this, PrefProperty.AUTH_TOKEN, "")
     private var prefLoginSuccessful : Boolean by Preference(this, PrefProperty.LOGIN_SUCCESSFUL, false)
@@ -34,8 +33,8 @@ class LoginActivity : BaseActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mUI.setContentView(this)
-        val loginId:  String by Preference(this, PrefProperty.USER_LOGIN_ID, "")
-        toast("loginId = $loginId")
+        //必须在AnkoComponent之外设置inputType，否则不生效
+        mUI.etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
 /*
         setContentView(R.layout.activity_login)
         password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
@@ -51,32 +50,32 @@ class LoginActivity : BaseActivity(), AnkoLogger {
     }
 
     private fun attemptLogin() {
-
         if(mUI.etUsername.text.isNullOrBlank()) {
             mUI.etUsername.error = getString(R.string.hub_error_field_required)
             mUI.etUsername.requestFocus()
             return
         }
         if(mUI.etPassword.text.isNullOrBlank()) {
+//            mUI.layoutPassword.isPasswordVisibilityToggleEnabled = false
             mUI.etPassword.error = getString(R.string.hub_error_field_required)
             mUI.etPassword.requestFocus()
             return
         }
-        prefUsername = mUI.etUsername.text.toString()
-        prefPassword = mUI.etPassword.text.toString()
         prefTokenAuth = ""
-        prefBasicAuth = getBasicCredentials(prefUsername, prefPassword)
         prefLoginSuccessful = false
+        prefBasicAuth = Credentials.basic(mUI.etUsername.text.toString(), mUI.etPassword.text.toString())
         apiService.postAuthorizations().flatMap {
             prefTokenAuth = it.token
-            prefLoginSuccessful = true
             apiService.getUser()
         }.schedule().subscribeBy(
                 onNext = {
-                    var loginId:  String by Preference(this, PrefProperty.USER_LOGIN_ID, "")
-                    loginId = it.login
-                    toast("login = ${it.login}, ${it.location}")
+                    var prefUsername : String by Preference(this, PrefProperty.USERNAME,  "")
+                    prefUsername = it.login
+                    prefLoginSuccessful = true
+                    toast("登录成功 sign by $prefUsername")
+                    finish()
                 },onError = {
+                    mUI.etUsername.requestFocus()
                     if(it is HttpException) {
                         toast("${it.getErrResponse()?.body?.message}")
                     }
@@ -84,48 +83,10 @@ class LoginActivity : BaseActivity(), AnkoLogger {
         )
     }
 
-/*
-    private fun attemptLogin() {
-        // Reset errors.
-        email.error = null
-        password.error = null
-
-        // Store values at the time of the login attempt.
-        val emailStr = email.text.toString()
-        val passwordStr = password.text.toString()
-
-        var cancel = false
-        var focusView: View? = null
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(emailStr)) {
-            email.error = getString(R.string.error_field_required)
-            focusView = email
-            cancel = true
-        } else if (TextUtils.isEmpty(passwordStr)) {
-            password.error = getString(R.string.error_field_required)
-            focusView = password
-            cancel = true
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView?.requestFocus()
-        } else {
-            toast("execute login")
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            */
-/*showProgress(true)
-            mAuthTask = UserLoginTask(emailStr, passwordStr)
-            mAuthTask!!.execute(null as Void?)*//*
-
-        }
-    }
-*/
 class LoginActivityUI: AnkoComponent<LoginActivity> {
     lateinit var etUsername: EditText
-    lateinit var etPassword: EditText
+    lateinit var etPassword: TextInputEditText
+    lateinit var layoutPassword: TextInputLayout
     lateinit var btnSignIn: Button
     private val customStyle = { view : Any ->
         when(view) {
@@ -148,12 +109,16 @@ class LoginActivityUI: AnkoComponent<LoginActivity> {
                         setText("conghaonet@gmail.com")
                     }
                 }.lparams(matchParent, wrapContent)
-                textInputLayout {
-                    etPassword = editText {
+                layoutPassword = textInputLayout {
+                    etPassword = textInputEditText {
                         hintResource = R.string.hub_prompt_password
-                        inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
                         setImeActionLabel(resources.getString(R.string.hub_action_sign_in_short), EditorInfo.IME_ACTION_DONE)
                         imeOptions = EditorInfo.IME_NULL
+                        textChangedListener {
+                            afterTextChanged {
+                                this@textInputLayout.isPasswordVisibilityToggleEnabled = this@textInputEditText.text.toString().isNotEmpty()
+                            }
+                        }
                         setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
                             if (actionId == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
                                 owner.attemptLogin()
