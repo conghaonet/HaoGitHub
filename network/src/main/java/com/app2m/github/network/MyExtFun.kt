@@ -45,7 +45,7 @@ fun ResponseBody.getContent(): String? {
         contentType()?.let { mediaType ->
             charset = mediaType.charset(Charset.forName(DEFAULT_CHARSET))
             if(REQUEST_MEDIA_TYPE == mediaType.type() && REQUEST_MEDIA_SUB_TYPE == mediaType.subtype()) {
-                AnkoLogger<GitHubInterceptor>().info("MediaType is $mediaType")
+                AnkoLogger<ResponseBody>().info("MediaType is $mediaType")
             }
         }
         if (contentLength() > 0) {

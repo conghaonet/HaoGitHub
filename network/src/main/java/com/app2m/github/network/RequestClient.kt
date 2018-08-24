@@ -1,6 +1,5 @@
 package com.app2m.github.network
 
-import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -11,12 +10,13 @@ import java.util.concurrent.TimeUnit
 class RequestClient {
     companion object {
         private val MY_HTTP_CLIENT by lazy {
-            OkHttpClient.Builder()
+            val builder = OkHttpClient.Builder()
                     .connectTimeout(10, TimeUnit.SECONDS)
                     .readTimeout(30, TimeUnit.SECONDS)
                     .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
                     .addInterceptor(GitHubInterceptor())
-                    .build()
+//                    .build()
+            Tls12SocketFactory.enableTls12OnPreLollipop(builder).build()
         }
 
         /**
