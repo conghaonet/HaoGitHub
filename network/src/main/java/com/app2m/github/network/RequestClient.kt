@@ -16,7 +16,7 @@ class RequestClient {
                     .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
                     .addInterceptor(GitHubInterceptor())
 //                    .build()
-            Tls12SocketFactory.enableTls12OnPreLollipop(builder).build()
+            Tls12SocketFactory.enableTls12OnKitkat(builder).build()
         }
 
         /**

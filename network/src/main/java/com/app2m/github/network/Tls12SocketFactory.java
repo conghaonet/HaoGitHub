@@ -6,7 +6,8 @@ import android.util.Log;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import okhttp3.TlsVersion;
  * <p/>
  * For some reason, android supports TLS v1.2 from API 16, but enables it by
  * default only from API 20.
+ * @author conghao
  * @link https://developer.android.com/reference/javax/net/ssl/SSLSocket.html
  * @see SSLSocketFactory
  */
@@ -30,9 +32,9 @@ public class Tls12SocketFactory extends SSLSocketFactory {
 
     private static final String[] TLS_V12_ONLY = {TlsVersion.TLS_1_2.javaName()};
 
-    final SSLSocketFactory delegate;
+    private final SSLSocketFactory delegate;
 
-    public Tls12SocketFactory(SSLSocketFactory base) {
+     private Tls12SocketFactory(SSLSocketFactory base) {
         this.delegate = base;
     }
 
@@ -52,12 +54,12 @@ public class Tls12SocketFactory extends SSLSocketFactory {
     }
 
     @Override
-    public Socket createSocket(String host, int port) throws IOException, UnknownHostException {
+    public Socket createSocket(String host, int port) throws IOException {
         return patch(delegate.createSocket(host, port));
     }
 
     @Override
-    public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException, UnknownHostException {
+    public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException {
         return patch(delegate.createSocket(host, port, localHost, localPort));
     }
 
@@ -78,26 +80,32 @@ public class Tls12SocketFactory extends SSLSocketFactory {
         return s;
     }
 
-    public static OkHttpClient.Builder enableTls12OnPreLollipop(OkHttpClient.Builder client) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
-                && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+    public static OkHttpClient.Builder enableTls12OnKitkat(OkHttpClient.Builder client) {
+         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+             return client;
+         }
+        SSLContext sslContext = null;
+        try {
+            sslContext = SSLContext.getInstance(TlsVersion.TLS_1_2.javaName());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        if (sslContext != null) {
             try {
-                SSLContext sc = SSLContext.getInstance(TlsVersion.TLS_1_2.javaName());
-                sc.init(null, null, null);
-                client.sslSocketFactory(new Tls12SocketFactory(sc.getSocketFactory()));
-
-                ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                        .tlsVersions(TlsVersion.TLS_1_2)
+                sslContext.init(null, null, null);
+                client.sslSocketFactory(new Tls12SocketFactory(sslContext.getSocketFactory()), new HttpsTrustManager());
+                client.hostnameVerifier(new HttpsTrustManager.TrustAllHostnameVerifier());
+                ConnectionSpec connectionSpec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                        .tlsVersions(TLS_V12_ONLY)
                         .build();
+                List<ConnectionSpec> specList = new ArrayList<>();
+                specList.add(connectionSpec);
+                specList.add(ConnectionSpec.COMPATIBLE_TLS);
+                specList.add(ConnectionSpec.CLEARTEXT);
 
-                List<ConnectionSpec> specs = new ArrayList<>();
-                specs.add(cs);
-                specs.add(ConnectionSpec.COMPATIBLE_TLS);
-                specs.add(ConnectionSpec.CLEARTEXT);
-
-                client.connectionSpecs(specs);
-            } catch (Exception exc) {
-                Log.e("OkHttpTLSCompat", "Error while setting TLS 1.2", exc);
+                client.connectionSpecs(specList);
+            } catch (KeyManagementException e) {
+                Log.e("OkHttpTLSCompat", "Error while setting TLS 1.2", e);
             }
         }
         return client;
