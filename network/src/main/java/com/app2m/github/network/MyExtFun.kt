@@ -1,12 +1,14 @@
 package com.app2m.github.network
 
 import com.app2m.github.network.data.ErrResponse
+import com.app2m.github.network.https.Tls12SocketFactory
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
@@ -53,4 +55,8 @@ fun ResponseBody.getContent(): String? {
         }
     }
     return strBody
+}
+
+fun OkHttpClient.Builder.enableTls12OnKitkat() : OkHttpClient.Builder {
+    return Tls12SocketFactory.enableTls12OnKitkat(this)
 }

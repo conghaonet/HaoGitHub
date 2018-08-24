@@ -11,13 +11,14 @@ import java.util.concurrent.TimeUnit
 class RequestClient {
     companion object {
         private val MY_HTTP_CLIENT by lazy {
-            val builder = OkHttpClient.Builder()
+            OkHttpClient.Builder()
                     .connectTimeout(10, TimeUnit.SECONDS)
                     .readTimeout(30, TimeUnit.SECONDS)
                     .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
                     .addInterceptor(GitHubInterceptor())
-//                    .build()
-            Tls12SocketFactory.enableTls12OnKitkat(builder).build()
+                    .enableTls12OnKitkat()
+                    .build()
+//            Tls12SocketFactory.enableTls12OnKitkat(builder).build()
         }
 
         /**
