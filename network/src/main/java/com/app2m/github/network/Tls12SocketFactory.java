@@ -105,7 +105,7 @@ public class Tls12SocketFactory extends SSLSocketFactory {
 
                 client.connectionSpecs(specList);
             } catch (KeyManagementException e) {
-                Log.e("OkHttpTLSCompat", "Error while setting TLS 1.2", e);
+                Log.e("Tls12SocketFactory", "Error while setting "+TlsVersion.TLS_1_2.javaName(), e);
             }
         }
         return client;
