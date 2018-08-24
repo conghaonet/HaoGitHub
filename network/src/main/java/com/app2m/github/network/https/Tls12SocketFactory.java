@@ -1,4 +1,4 @@
-package com.app2m.github.network;
+package com.app2m.github.network.https;
 
 import android.os.Build;
 import android.util.Log;
