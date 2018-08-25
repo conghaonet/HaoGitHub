@@ -1,4 +1,18 @@
 <resources>
+    <!-- Base application theme. -->
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <!--Toolbar颜色-->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!--已在hub/res/values/styles.xml中定义actionOverflowMenuStyle-->
+        <!--<item name="actionOverflowMenuStyle">@style/MyOverflowMenuStyle</item>-->
+    </style>
+    <style name="AppTheme" parent="AppBaseTheme">
+    </style>
+
     <!-- Toolbar菜单样式 -->
     <style name="MyToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <!--Toolbar背景色，如果定义该属性将一同修改popupTheme的背景色，即使定义了popupTheme的背景色也会无效-->
