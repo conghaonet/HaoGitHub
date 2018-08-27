@@ -163,7 +163,7 @@ class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {
             }.lparams(width = matchParent, height = matchParent)
             navigationView = navigationView {
                 fitsSystemWindows = true
-                addHeaderView(createHeaderView(ui, this@navigationView))
+                addHeaderView(createHeaderView(ui, this))
                 inflateMenu(R.menu.hub_home_menu)
             }.lparams(width = dip(240), height = matchParent) {
                 gravity = Gravity.START
