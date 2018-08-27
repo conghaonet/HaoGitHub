@@ -27,48 +27,54 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-//        startActivity<HomeActivity>()
+        startActivity<HomeActivity>()
     }
 
     fun tryObservable() {
         Observable.create(ObservableOnSubscribe<Int> {
+            info("Observable start")
             var i = 0
-            while (true) {
-                i++
+            while (i<10) {
                 it.onNext(i)
                 info("发送---->$i")
+                i++
             }
-//            it.onComplete()
+            it.onComplete()
         }).schedule().subscribeBy(
                 onError = {
                     info (it.getStackTraceString())
                 },
                 onNext = {
-                    Thread.sleep(50)
+                    Thread.sleep(10)
                     info("接收====>$it")
+//                    System.out.println("接收====>$it")
                 },
                 onComplete = {
-                    info("onComplete")
+                    info("Observable onComplete")
                 }
         )
     }
     fun tryFlowable() {
         Flowable.create(FlowableOnSubscribe<Int> {
+            info("Flowable start")
             var i = 0
             while (i<500) {
-                i++
                 it.onNext(i)
+                Thread.sleep(5)
+                info("发送---->$i")
+                i++
             }
             it.onComplete()
-        }, BackpressureStrategy.DROP).schedule().subscribeBy(
+        }, BackpressureStrategy.MISSING).schedule().subscribeBy(
                 onError = {
                     info (it.getStackTraceString())
                 },
                 onNext = {
+                    Thread.sleep(10)
                     info("接收====>$it")
                 },
                 onComplete = {
-                    info("onComplete")
+                    info("Flowable onComplete")
                 }
         )
     }
