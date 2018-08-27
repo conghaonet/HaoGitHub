@@ -1,38 +1,36 @@
 package com.app2m.github.hub
 
 import android.content.res.Configuration
-import android.content.res.Resources
-import android.graphics.Color
-import android.graphics.Paint
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
-import android.support.v4.content.ContextCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.appcompat.R.attr.theme
 import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.app2m.github.hub.adapter.MenuItemAdapter
 import com.app2m.github.hub.base.BaseActivity
-import com.app2m.github.hub.ext.supportToolbar
 import com.app2m.github.hub.ext.themeSupportToolbar
 import com.app2m.github.network.GitHubService
 import com.app2m.github.network.RequestClient
-import io.reactivex.rxkotlin.subscribeBy
+import com.app2m.github.network.schedule
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.navigationView
 import org.jetbrains.anko.support.v4.drawerLayout
-import com.app2m.github.network.schedule
-import org.jetbrains.anko.custom.style
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.sdk25.coroutines.onClick
+
 
 class HomeActivity: BaseActivity() {
     private lateinit var homeActivityUI: HomeActivityUI
     lateinit var mDrawerToggle : ActionBarDrawerToggle
+    val mCompositeDisposable: CompositeDisposable = CompositeDisposable()
+    var disposable: Disposable? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeActivityUI = HomeActivityUI()
@@ -64,15 +62,33 @@ class HomeActivity: BaseActivity() {
     }
     fun requestGitHubApi() {
         val apiService = RequestClient.buildService(GitHubService::class.java)
-        apiService.getGitHubApi().schedule().subscribeBy (
-            onNext = {
-                toast(it.toString())
-            },
-            onError =  {
-                it.printStackTrace()
-            }
+        disposable = apiService.getGitHubApi().onBackpressureDrop().schedule().subscribeBy(
+                onNext = {
+                    toast(it.toString())
+                },
+                onError =  {
+                    it.printStackTrace()
+                }
         )
+        mCompositeDisposable.add(disposable!!)
+
+/*
+        var disposable = apiService.getGitHubApi().onBackpressureDrop().schedule().subscribe(
+                {
+                    toast(it.toString())
+                }, {
+                    toast(it.getStackTraceString())
+                }, {
+                    toast("onComplete")
+                }, {
+                    it.request(Long.MAX_VALUE)
+                    toast("Subscription")
+                }
+        )
+        mCompositeDisposable.add(disposable)
+*/
     }
+
     fun openLoginActivity() {
         startActivity<LoginActivity>()
     }
@@ -108,6 +124,10 @@ class HomeActivity: BaseActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    override fun onDestroy() {
+        mCompositeDisposable.dispose()
+        super.onDestroy()
+    }
 }
 
 class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {

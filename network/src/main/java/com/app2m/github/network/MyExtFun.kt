@@ -4,6 +4,7 @@ import com.app2m.github.network.data.ErrResponse
 import com.app2m.github.network.https.Tls12SocketFactory
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,6 +18,11 @@ import java.nio.charset.Charset
 
 fun<T> Observable<T>.schedule(subscribeOn : Scheduler = Schedulers.io(),
                               observeOn : Scheduler = AndroidSchedulers.mainThread()): Observable<T> {
+    return subscribeOn(subscribeOn).observeOn(observeOn)
+}
+
+fun<T> Flowable<T>.schedule(subscribeOn : Scheduler = Schedulers.io(),
+                         observeOn : Scheduler = AndroidSchedulers.mainThread()): Flowable<T> {
     return subscribeOn(subscribeOn).observeOn(observeOn)
 }
 

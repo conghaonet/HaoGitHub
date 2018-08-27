@@ -8,6 +8,10 @@ import android.view.Menu
 import android.widget.Button
 import com.app2m.github.hub.HomeActivity
 import com.app2m.github.hub.ext.themeSupportToolbar
+import com.app2m.github.network.schedule
+import io.reactivex.*
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.subscribeBy
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.support.v4.nestedScrollView
@@ -22,6 +26,51 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
         setSupportActionBar(mUI.toolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+//        startActivity<HomeActivity>()
+    }
+
+    fun tryObservable() {
+        Observable.create(ObservableOnSubscribe<Int> {
+            var i = 0
+            while (true) {
+                i++
+                it.onNext(i)
+                info("发送---->$i")
+            }
+//            it.onComplete()
+        }).schedule().subscribeBy(
+                onError = {
+                    info (it.getStackTraceString())
+                },
+                onNext = {
+                    Thread.sleep(50)
+                    info("接收====>$it")
+                },
+                onComplete = {
+                    info("onComplete")
+                }
+        )
+    }
+    fun tryFlowable() {
+        Flowable.create(FlowableOnSubscribe<Int> {
+            var i = 0
+            while (i<500) {
+                i++
+                it.onNext(i)
+            }
+            it.onComplete()
+        }, BackpressureStrategy.DROP).schedule().subscribeBy(
+                onError = {
+                    info (it.getStackTraceString())
+                },
+                onNext = {
+                    info("接收====>$it")
+                },
+                onComplete = {
+                    info("onComplete")
+                }
+        )
     }
 
     //设置menu（右边图标）
@@ -71,6 +120,16 @@ class MainActivityUI<T> : AnkoComponent<T>, AnkoLogger {
                     button("GitHub Home") {
                         onClick {
                             startActivity<HomeActivity>()
+                        }
+                    }
+                    button("Try Observable") {
+                        onClick {
+                            (owner as MainActivity).tryObservable()
+                        }
+                    }
+                    button("Try Flowable") {
+                        onClick {
+                            (owner as MainActivity).tryFlowable()
                         }
                     }
                 }
