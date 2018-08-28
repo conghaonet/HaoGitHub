@@ -59,6 +59,8 @@ class LoginActivity : BaseActivity(), AnkoLogger {
                 onNext = {
                     var prefUsername : String by Preference(this, PrefProperty.USERNAME,  "")
                     prefUsername = it.login
+                    var prefAvatar : String by Preference(this, PrefProperty.USER_AVATAR,  "")
+                    prefAvatar = it.avatar_url
                     prefLoginSuccessful = true
                     toast("登录成功 sign by $prefUsername")
                     finish()

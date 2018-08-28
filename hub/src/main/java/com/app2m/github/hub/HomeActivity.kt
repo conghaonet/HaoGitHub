@@ -24,9 +24,9 @@ import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class HomeActivity: BaseActivity() {
     val homeActivityUI = HomeActivityUI()
-    lateinit var mDrawerToggle : ActionBarDrawerToggle
-    val mCompositeDisposable = CompositeDisposable()
-    var disposable: Disposable? = null
+    private lateinit var mDrawerToggle : ActionBarDrawerToggle
+    private val mCompositeDisposable = CompositeDisposable()
+    private var disposable: Disposable? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeActivityUI.setContentView(this)
@@ -47,6 +47,7 @@ class HomeActivity: BaseActivity() {
         homeActivityUI.navigationView.setNavigationItemSelectedListener {
             when(it.itemId) {
                 R.id.nav_camera,R.id.nav_gallery  -> {
+                    homeActivityUI.headerUI.refresh()
                     this@HomeActivity.toast("${it.title}")
                 }
                 else -> this@HomeActivity.toast("else")
@@ -114,26 +115,7 @@ class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {
     lateinit var toolbar : Toolbar
     lateinit var drawerLayout: DrawerLayout
     lateinit var navigationView: NavigationView
-    private fun createHeaderView(ui: AnkoContext<HomeActivity>): View{
-        return with(ui.ctx) {
-            verticalLayout {
-                lparams(matchParent, wrapContent)
-                backgroundColor = 0x3300FF00.toInt()
-                gravity = Gravity.CENTER_HORIZONTAL
-
-                button(R.string.hub_menu_login_button) {
-                    onClick {
-                        ui.owner.openLoginActivity()
-                        //手动控制drawerLayout的显示/隐藏
-                        drawerLayout.closeDrawer(Gravity.START)
-                    }
-                }.lparams(wrapContent, wrapContent)
-                textView {
-                    text = "Header View"
-                }.lparams(wrapContent, wrapContent)
-            }
-        }
-    }
+    var headerUI = HomeHeaderUI()
     override fun createView(ui: AnkoContext<HomeActivity>) = ui.apply {
         drawerLayout = drawerLayout {
             lparams(width = matchParent, height = matchParent)
@@ -166,8 +148,7 @@ class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {
             }.lparams(width = matchParent, height = matchParent)
             navigationView = navigationView {
                 fitsSystemWindows = true
-//                addHeaderView(createHeaderView(ui))
-                addHeaderView(HomeHeaderUI().createView(this@apply))
+                addHeaderView(headerUI.createView(this@apply))
                 inflateMenu(R.menu.hub_home_menu)
             }.lparams(width = dip(240), height = matchParent) {
                 gravity = Gravity.START
