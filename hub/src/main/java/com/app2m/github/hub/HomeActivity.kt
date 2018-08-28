@@ -10,6 +10,7 @@ import android.view.*
 import android.widget.LinearLayout
 import com.app2m.github.hub.base.BaseActivity
 import com.app2m.github.hub.ext.themeSupportToolbar
+import com.app2m.github.hub.ui.HomeHeaderUI
 import com.app2m.github.network.GitHubService
 import com.app2m.github.network.RequestClient
 import com.app2m.github.network.schedule
@@ -22,13 +23,12 @@ import io.reactivex.rxkotlin.subscribeBy
 import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class HomeActivity: BaseActivity() {
-    private lateinit var homeActivityUI: HomeActivityUI
+    val homeActivityUI = HomeActivityUI()
     lateinit var mDrawerToggle : ActionBarDrawerToggle
-    val mCompositeDisposable: CompositeDisposable = CompositeDisposable()
+    val mCompositeDisposable = CompositeDisposable()
     var disposable: Disposable? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        homeActivityUI = HomeActivityUI()
         homeActivityUI.setContentView(this)
         setSupportActionBar(homeActivityUI.toolbar)
         supportActionBar?.setHomeButtonEnabled(true)
@@ -115,7 +115,7 @@ class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {
     lateinit var drawerLayout: DrawerLayout
     lateinit var navigationView: NavigationView
     private fun createHeaderView(ui: AnkoContext<HomeActivity>): View{
-        val headerLayout : LinearLayout = with(ui.ctx) {
+        return with(ui.ctx) {
             verticalLayout {
                 lparams(matchParent, wrapContent)
                 backgroundColor = 0x3300FF00.toInt()
@@ -133,7 +133,6 @@ class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {
                 }.lparams(wrapContent, wrapContent)
             }
         }
-        return headerLayout
     }
     override fun createView(ui: AnkoContext<HomeActivity>) = ui.apply {
         drawerLayout = drawerLayout {
@@ -167,7 +166,8 @@ class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {
             }.lparams(width = matchParent, height = matchParent)
             navigationView = navigationView {
                 fitsSystemWindows = true
-                addHeaderView(createHeaderView(ui))
+//                addHeaderView(createHeaderView(ui))
+                addHeaderView(HomeHeaderUI().createView(this@apply))
                 inflateMenu(R.menu.hub_home_menu)
             }.lparams(width = dip(240), height = matchParent) {
                 gravity = Gravity.START

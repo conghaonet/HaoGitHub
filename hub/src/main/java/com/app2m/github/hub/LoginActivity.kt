@@ -35,18 +35,6 @@ class LoginActivity : BaseActivity(), AnkoLogger {
         mUI.setContentView(this)
         //必须在AnkoComponent之外设置inputType，否则不生效
         mUI.etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-/*
-        setContentView(R.layout.activity_login)
-        password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
-            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                attemptLogin()
-                return@OnEditorActionListener true
-            }
-            false
-        })
-
-        email_sign_in_button.setOnClickListener { attemptLogin() }
-*/
     }
 
     private fun attemptLogin() {
