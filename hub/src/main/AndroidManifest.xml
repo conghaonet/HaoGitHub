@@ -10,7 +10,7 @@
     <application>
         <activity android:name=".HomeActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".base.BaseActivity"></activity>
+        <activity android:name=".ProfileActivity" />
     </application>
 
 </manifest>

@@ -38,4 +38,13 @@
         <!--设置三个点的背景色-->
         <item name="android:background">@color/colorAccent</item>
     </style>
+
+    <style name="CollapsingLayoutCollapsedTitle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+    <style name="CollapsingLayoutExpandedTitle">
+        <item name="android:textSize">23sp</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
 </resources>
