@@ -1,0 +1,81 @@
+Parallel execution with configuration on demand is an incubating feature.
+:app:dependencies
+
+------------------------------------------------------------
+Project :app
+------------------------------------------------------------
+
+releaseCompileClasspath - Resolved configuration for compilation for variant: release
++--- org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.2.61
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:1.2.61
+|         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.2.61
+|         \--- org.jetbrains:annotations:13.0
++--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.61
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.2.61 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.61
+|         \--- org.jetbrains.kotlin:kotlin-stdlib:1.2.61 (*)
++--- com.android.support:multidex:1.0.3
++--- com.android.support:appcompat-v7:27.1.1
+|    +--- com.android.support:support-annotations:27.1.1
+|    +--- com.android.support:support-core-utils:27.1.1
+|    |    +--- com.android.support:support-annotations:27.1.1
+|    |    \--- com.android.support:support-compat:27.1.1
+|    |         +--- com.android.support:support-annotations:27.1.1
+|    |         \--- android.arch.lifecycle:runtime:1.1.0
+|    |              +--- android.arch.lifecycle:common:1.1.0
+|    |              \--- android.arch.core:common:1.1.0
+|    +--- com.android.support:support-fragment:27.1.1
+|    |    +--- com.android.support:support-compat:27.1.1 (*)
+|    |    +--- com.android.support:support-core-ui:27.1.1
+|    |    |    +--- com.android.support:support-annotations:27.1.1
+|    |    |    +--- com.android.support:support-compat:27.1.1 (*)
+|    |    |    \--- com.android.support:support-core-utils:27.1.1 (*)
+|    |    +--- com.android.support:support-core-utils:27.1.1 (*)
+|    |    +--- com.android.support:support-annotations:27.1.1
+|    |    +--- android.arch.lifecycle:livedata-core:1.1.0
+|    |    |    +--- android.arch.lifecycle:common:1.1.0
+|    |    |    +--- android.arch.core:common:1.1.0
+|    |    |    \--- android.arch.core:runtime:1.1.0
+|    |    |         \--- android.arch.core:common:1.1.0
+|    |    \--- android.arch.lifecycle:viewmodel:1.1.0
+|    +--- com.android.support:support-vector-drawable:27.1.1
+|    |    +--- com.android.support:support-annotations:27.1.1
+|    |    \--- com.android.support:support-compat:27.1.1 (*)
+|    \--- com.android.support:animated-vector-drawable:27.1.1
+|         +--- com.android.support:support-vector-drawable:27.1.1 (*)
+|         \--- com.android.support:support-core-ui:27.1.1 (*)
++--- org.jetbrains.anko:anko-sdk25:0.10.5
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.1.0 -> 1.2.61 (*)
+|    \--- org.jetbrains.anko:anko-commons:0.10.5
+|         \--- org.jetbrains.kotlin:kotlin-stdlib:1.1.0 -> 1.2.61 (*)
++--- org.jetbrains.anko:anko-sdk25-coroutines:0.10.5
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.1.0 -> 1.2.61 (*)
+|    +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:0.15
+|    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:0.15
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.1.2 -> 1.2.61 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.1.2 -> 1.2.61 (*)
+|    \--- org.jetbrains.anko:anko-commons:0.10.5 (*)
++--- org.jetbrains.anko:anko-appcompat-v7:0.10.5
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.1.0 -> 1.2.61 (*)
+|    +--- org.jetbrains.anko:anko-support-v4:0.10.5
+|    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.1.0 -> 1.2.61 (*)
+|    |    +--- org.jetbrains.anko:anko-commons:0.10.5 (*)
+|    |    \--- org.jetbrains.anko:anko-support-v4-commons:0.10.5
+|    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.1.0 -> 1.2.61 (*)
+|    |         \--- org.jetbrains.anko:anko-commons:0.10.5 (*)
+|    \--- org.jetbrains.anko:anko-appcompat-v7-commons:0.10.5
+|         +--- org.jetbrains.kotlin:kotlin-stdlib:1.1.0 -> 1.2.61 (*)
+|         \--- org.jetbrains.anko:anko-support-v4-commons:0.10.5 (*)
++--- io.reactivex.rxjava2:rxkotlin:2.3.0
+|    +--- io.reactivex.rxjava2:rxjava:2.2.0
+|    |    \--- org.reactivestreams:reactive-streams:1.0.2
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:1.2.60 -> 1.2.61 (*)
++--- io.reactivex.rxjava2:rxandroid:2.0.2
+|    \--- io.reactivex.rxjava2:rxjava:2.1.9 -> 2.2.0 (*)
++--- project :hub
+\--- project :network
+
+(*) - dependencies omitted (listed previously)
+
+BUILD SUCCESSFUL in 14s
+1 actionable task: 1 executed
