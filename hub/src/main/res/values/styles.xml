@@ -9,8 +9,10 @@
         <item name="colorAccent">@color/colorAccent</item>
         <!--已在hub/res/values/styles.xml中定义actionOverflowMenuStyle-->
         <!--<item name="actionOverflowMenuStyle">@style/MyOverflowMenuStyle</item>-->
+
     </style>
     <style name="AppTheme" parent="AppBaseTheme">
+        <!--<item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>-->
     </style>
 
     <!-- Toolbar菜单样式 -->
@@ -45,6 +47,6 @@
     </style>
     <style name="CollapsingLayoutExpandedTitle">
         <item name="android:textSize">23sp</item>
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">@android:color/transparent</item>
     </style>
 </resources>

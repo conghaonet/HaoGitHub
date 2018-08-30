@@ -9,15 +9,12 @@ import org.jetbrains.anko.custom.ankoView
  */
 @Suppress("NOTHING_TO_INLINE")
 inline fun ViewManager.supportToolbar(): Toolbar = supportToolbar() {}
-@Suppress("NOTHING_TO_INLINE")
-inline fun ViewManager.themeSupportToolbar(theme: Int = 0): Toolbar = themeSupportToolbar(theme) {}
-/**
- * SwipyRefreshLayout.()：T.()->Unit 和 ()->Unit 的区别
- * https://www.jianshu.com/p/88a656e59c61
- */
 inline fun ViewManager.supportToolbar(init: Toolbar.() -> Unit): Toolbar {
     return ankoView({ Toolbar(it) }, theme = 0, init = init)
 }
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun ViewManager.themeSupportToolbar(theme: Int = 0): Toolbar = themeSupportToolbar(theme) {}
 inline fun ViewManager.themeSupportToolbar(theme: Int = 0, init: Toolbar.() -> Unit): Toolbar {
     return ankoView({ Toolbar(it) }, theme, init = init)
 }

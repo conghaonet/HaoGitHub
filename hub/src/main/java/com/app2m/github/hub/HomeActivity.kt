@@ -7,7 +7,6 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.*
-import com.app2m.github.hub.R.attr.actionBarSize
 import com.app2m.github.hub.base.BaseActivity
 import com.app2m.github.hub.ext.themeSupportToolbar
 import com.app2m.github.hub.ui.HomeHeaderUI
@@ -134,7 +133,7 @@ class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {
                         textSize = 18f
                         textColor = 0xFFFFFFFF.toInt()
                     }
-                }.lparams(matchParent, dimenAttr(actionBarSize))
+                }.lparams(matchParent, dimenAttr(R.attr.actionBarSize))
                 textView {
                     text = "content layout"
                     textSize = 24f
