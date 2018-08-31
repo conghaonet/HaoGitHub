@@ -30,8 +30,12 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation "junit:junit:$junit_version"
-    androidTestImplementation "com.android.support.test:runner:$test_runner_version"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:$test_espresso_version"
+    androidTestImplementation ("com.android.support.test:runner:$test_runner_version") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestImplementation ("com.android.support.test.espresso:espresso-core:$test_espresso_version") {
+        exclude group: 'com.android.support.test', module: 'runner'
+    }
 
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 //    kapt "com.android.databinding:compiler:$gradle_plugin_version"
@@ -49,4 +53,24 @@ dependencies {
 
     implementation project(':hub')
     implementation project(path: ':network')
+
+    configurations {
+//        all*.exclude group: 'android.support', module: 'android-support-v4'
+//        all*.exclude group: 'android.support'
+    }
+    configurations.all {
+        resolutionStrategy {
+//            force "com.android.support:support-annotations:$android_support_version"
+//            force "com.android.support:support-v4:$android_support_version"
+//            force "com.android.support:appcompat-v7:$android_support_version"
+//            force "com.android.support:support-v13:$android_support_version"
+//            force "com.android.support:recyclerview-v7:$android_support_version"
+//            force "com.android.support:cardview-v7:$android_support_version"
+//            force "com.android.support:design:$android_support_version"
+//            force "com.android.support:palette-v7:$android_support_version"
+//            force "com.android.support:percent:$android_support_version"
+//            force "com.android.support:customtabs:$android_support_version"
+//            force "com.android.support:support-fragment:$android_support_version"
+        }
+    }
 }
