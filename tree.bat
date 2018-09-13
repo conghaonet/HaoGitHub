@@ -12,4 +12,17 @@ if %hour:~0,1%"" == "" (
 set min=%time:~3,2%
 set sec=%time:~6,2%
 set datetime=%year%%month%%day%-%hour%%min%%sec%
-gradlew :app:dependencies --configuration releaseCompileClasspath >tree_%datetime%.txt
+
+REM gradlew :app:dependencies >tree_all_%datetime%.txt
+gradlew :app:dependencies --configuration debugCompileClasspath >tree_debugCompile_%datetime%.txt
+REM gradlew :app:dependencies --configuration debugAndroidTestCompileClasspath >tree_debugAndroidTestCompile_%datetime%.txt
+REM gradlew :app:dependencies --configuration debugAndroidTestRuntimeClasspath >tree_debugAndroidTestRuntime_%datetime%.txt
+REM gradlew :app:dependencies --configuration debugAnnotationProcessorClasspath >tree_debugAnnotationProcessor_%datetime%.txt
+REM gradlew :app:dependencies --configuration debugRuntimeClasspath >tree_debugRuntime_%datetime%.txt
+REM gradlew :app:dependencies --configuration debugUnitTestCompileClasspath >tree_debugUnitTestCompile_%datetime%.txt
+REM gradlew :app:dependencies --configuration debugUnitTestRuntimeClasspath >tree_debugUnitTestRuntime_%datetime%.txt
+REM gradlew :app:dependencies --configuration releaseCompileClasspath >tree_releaseCompile_%datetime%.txt
+REM gradlew :app:dependencies --configuration releaseAnnotationProcessorClasspath >tree_releaseAnnotationProcessor_%datetime%.txt
+REM gradlew :app:dependencies --configuration releaseRuntimeClasspath >tree_releaseRuntime_%datetime%.txt
+REM gradlew :app:dependencies --configuration releaseUnitTestCompileClasspath >tree_releaseUnitTestCompile_%datetime%.txt
+REM gradlew :app:dependencies --configuration releaseUnitTestRuntimeClasspath >tree_releaseUnitTestRuntime_%datetime%.txt
