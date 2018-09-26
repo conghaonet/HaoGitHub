@@ -4,6 +4,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import com.app2m.github.hub.GlideApp
 import com.app2m.github.hub.HomeActivity
 import com.app2m.github.hub.R
@@ -16,7 +17,8 @@ class HomeHeaderUI: AnkoComponent<HomeActivity>, AnkoLogger {
     private lateinit var loginButton: Button
     private lateinit var avatarImg: ImageView
     override fun createView(ui: AnkoContext<HomeActivity>): View {
-        return ui.ctx.verticalLayout {
+        return ui.ctx.linearLayout {
+            orientation = LinearLayout.VERTICAL
             lparams(matchParent, wrapContent)
             backgroundColor = 0x3300FF00.toInt()
             gravity = Gravity.CENTER_HORIZONTAL

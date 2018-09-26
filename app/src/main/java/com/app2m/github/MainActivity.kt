@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.Menu
 import android.widget.Button
+import android.widget.LinearLayout
 import com.app2m.github.hub.HomeActivity
 import com.app2m.github.hub.ext.themeSupportToolbar
 import com.app2m.github.network.schedule
@@ -104,7 +105,8 @@ class MainActivityUI<T> : AnkoComponent<T>, AnkoLogger {
         }
     }
     override fun createView(ui: AnkoContext<T>) = with(ui){
-        verticalLayout {
+        linearLayout {
+            orientation = LinearLayout.VERTICAL
             lparams(matchParent, matchParent)
             toolbar = themeSupportToolbar(R.style.MyToolbarStyle) {
                 title = "Toolbar"

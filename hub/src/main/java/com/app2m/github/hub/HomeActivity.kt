@@ -7,6 +7,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.*
+import android.widget.LinearLayout
 import com.app2m.github.hub.base.BaseActivity
 import com.app2m.github.hub.ext.themeSupportToolbar
 import com.app2m.github.hub.ui.HomeHeaderUI
@@ -118,7 +119,8 @@ class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {
     override fun createView(ui: AnkoContext<HomeActivity>) = ui.apply {
         drawerLayout = drawerLayout {
             lparams(width = matchParent, height = matchParent)
-            verticalLayout {
+            linearLayout {
+                orientation = LinearLayout.VERTICAL
                 toolbar = themeSupportToolbar(R.style.MyToolbarStyle) {
                     // 设置toolbar的title与左边导航图标之间的间距为0，否则左边始终会有间距，
                     // 或者在dimens.xml中定义：<dimen name="abc_action_bar_content_inset_with_nav" tools:override="true">0dp</dimen>

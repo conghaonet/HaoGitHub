@@ -7,6 +7,7 @@ import android.text.InputType
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.app2m.github.hub.base.BaseActivity
 import com.app2m.github.network.*
@@ -91,7 +92,8 @@ class LoginActivityUI: AnkoComponent<LoginActivity> {
     override fun createView(ui: AnkoContext<LoginActivity>) = ui.apply{
         frameLayout {
             lparams(matchParent, matchParent)
-            verticalLayout {
+            linearLayout {
+                orientation = LinearLayout.VERTICAL
                 textInputLayout {
                     etUsername = editText {
                         hintResource = R.string.hub_prompt_username

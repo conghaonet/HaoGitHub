@@ -33,6 +33,7 @@ import com.bumptech.glide.request.transition.Transition
 import android.os.Build
 import android.graphics.drawable.BitmapDrawable
 import android.support.v4.content.ContextCompat
+import android.widget.LinearLayout
 import com.app2m.github.hub.glide.BackgroundViewTarget
 import org.jetbrains.anko.design.themedCoordinatorLayout
 
@@ -69,7 +70,8 @@ class ProfileUI: AnkoComponent<ProfileActivity>, AnkoLogger {
                         view {
                             backgroundColor = 0x99000000.toInt()
                         }.lparams(matchParent, matchParent)
-                        verticalLayout {
+                        linearLayout {
+                            orientation = LinearLayout.VERTICAL
                             avatarView = imageView {
                                 scaleType = ImageView.ScaleType.CENTER_CROP
                             }.lparams(dip(64), dip(64))
@@ -91,7 +93,8 @@ class ProfileUI: AnkoComponent<ProfileActivity>, AnkoLogger {
             }.lparams(matchParent, wrapContent)
             nestedScrollView {
                 fitsSystemWindows = true
-                verticalLayout {
+                linearLayout {
+                    orientation = LinearLayout.VERTICAL
                     button("button 1") {
 
                     }.lparams(matchParent,dip(150))
