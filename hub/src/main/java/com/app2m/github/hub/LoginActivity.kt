@@ -55,7 +55,7 @@ class LoginActivity : BaseActivity(), AnkoLogger {
         prefBasicAuth = Credentials.basic(mUI.etUsername.text.toString(), mUI.etPassword.text.toString())
         apiService.postAuthorizations().flatMap {
             prefTokenAuth = it.token
-            apiService.getUser()
+            apiService.getCurrentUser()
         }.schedule().subscribeBy(
                 onNext = {
                     var prefUsername : String by Preference(this, PrefProperty.USERNAME,  "")

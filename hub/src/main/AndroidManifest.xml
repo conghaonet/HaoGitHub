@@ -11,6 +11,7 @@
         <activity android:name=".HomeActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".ProfileActivity" />
+        <activity android:name=".CurrentUserActivity"></activity>
     </application>
 
 </manifest>

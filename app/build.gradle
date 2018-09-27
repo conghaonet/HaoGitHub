@@ -10,7 +10,7 @@ apply from: "../configs/android.gradle"
 android {
     defaultConfig {
         applicationId "com.app2m.github"
-//        multiDexEnabled true
+        multiDexEnabled true
     }
     dexOptions {
         javaMaxHeapSize "4g"

@@ -11,8 +11,9 @@
     <string name="hub_error_field_required">不可为空</string>
     <string name="hub_toast_login_successful">登录成功</string>
     <string name="hub_toast_login_failed">登录失败</string>
-</resources>
-<!--
+
+    <string name="home_page_label">主页：</string>
+</resources><!--
 <resources>
     <string name="app_name">hub</string>
     <string name="hub_menu_login_button">Sign in</string>

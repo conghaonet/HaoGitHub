@@ -1,12 +1,10 @@
 android {
-/*
     dataBinding {
         enabled = true
     }
-*/
 
     compileSdkVersion 27
-    buildToolsVersion '28.0.3' //27.0.3, 28.0.3
+    buildToolsVersion '27.0.3' //27.0.3, 28.0.3
 
     defaultConfig {
         minSdkVersion 16
@@ -45,4 +43,8 @@ android {
     }
 */
 }
-kotlin { experimental { coroutines 'enable' } }
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
+}

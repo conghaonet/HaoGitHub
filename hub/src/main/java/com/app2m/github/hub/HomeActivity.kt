@@ -152,6 +152,12 @@ class HomeActivityUI : AnkoComponent<HomeActivity>, AnkoLogger {
                         startActivity<ProfileActivity>()
                     }
                 }
+                button {
+                    text = "goto current user activity"
+                    onClick {
+                        startActivity<CurrentUserActivity>()
+                    }
+                }
             }.lparams(width = matchParent, height = matchParent)
             navigationView = navigationView {
                 fitsSystemWindows = true

@@ -12,10 +12,13 @@ interface GitHubService {
     @POST("authorizations")
     fun postAuthorizations(@Body body : AuthorizationBody = AuthorizationBody()) : Observable<Authorization>
 
+    /**
+     * current_user_url=https://api.github.com/user
+     */
     @GET("user")
-    fun getUser() : Observable<User>
+    fun getCurrentUser() : Observable<User>
 
-    @GET("users/{owner}")
-    fun getUsersOwner(@Path("owner") owner : String) : Observable<UsersOwner>
+    @GET("users/{user}")
+    fun getUser(@Path("user") user : String) : Observable<User>
 
 }

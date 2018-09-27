@@ -10,7 +10,7 @@ dependencies {
         exclude group: 'com.android.support.test', module: 'runner'
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    kapt "com.android.databinding:compiler:$gradle_plugin_version"
+//    kapt "com.android.databinding:compiler:$gradle_plugin_version"
 
     implementation "com.android.support:support-v4:$android_support_version"
     implementation "com.android.support:appcompat-v7:$android_support_version"
