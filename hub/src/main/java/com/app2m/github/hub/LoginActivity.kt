@@ -1,15 +1,18 @@
 package com.app2m.github.hub
 
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
 import android.text.InputType
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.app2m.github.hub.base.BaseActivity
+import com.app2m.github.hub.databinding.LoginActivityBinding
 import com.app2m.github.network.*
 import io.reactivex.rxkotlin.subscribeBy
 import okhttp3.Credentials
@@ -31,11 +34,24 @@ class LoginActivity : BaseActivity(), AnkoLogger {
     private val mUI: LoginActivityUI by lazy {
         LoginActivityUI()
     }
+
+    private val mBinding by lazy {
+        DataBindingUtil.setContentView<LoginActivityBinding>(this, R.layout.login_activity)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mBinding.activity = this
+
+/*
         mUI.setContentView(this)
         //必须在AnkoComponent之外设置inputType，否则不生效
         mUI.etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+*/
+    }
+
+    fun onClickLogin(view: View) {
+        toast("dfasdfasdf")
     }
 
     private fun attemptLogin() {
