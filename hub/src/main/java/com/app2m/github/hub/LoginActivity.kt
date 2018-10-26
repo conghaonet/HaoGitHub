@@ -22,7 +22,6 @@ import org.jetbrains.anko.design.textInputLayout
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.textChangedListener
 import retrofit2.HttpException
-
 /**
  * A login screen that offers login via email/password.
  */
@@ -31,9 +30,11 @@ class LoginActivity : BaseActivity(), AnkoLogger {
     private var prefBasicAuth : String by Preference(this, PrefProperty.AUTH_BASIC, "")
     private var prefTokenAuth : String by Preference(this, PrefProperty.AUTH_TOKEN, "")
     private var prefLoginSuccessful : Boolean by Preference(this, PrefProperty.LOGIN_SUCCESSFUL, false)
+/*
     private val mUI: LoginActivityUI by lazy {
         LoginActivityUI()
     }
+*/
 
     private val mBinding by lazy {
         DataBindingUtil.setContentView<LoginActivityBinding>(this, R.layout.login_activity)
@@ -42,7 +43,29 @@ class LoginActivity : BaseActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding.activity = this
+/*
+        mBinding.etLoginPassword.setImeActionLabel(resources.getString(R.string.hub_action_sign_in_short), EditorInfo.IME_ACTION_DONE)
+        mBinding.etLoginPassword.imeOptions = EditorInfo.IME_NULL
+        mBinding.etLoginPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+*/
 
+/*
+        mBinding.etLoginPassword.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+                attemptLogin()
+
+                return@OnEditorActionListener true
+            }
+            false
+        })
+*/
+/*
+        mBinding.etLoginPassword.textChangedListener {
+            afterTextChanged {
+//                mBinding.etLoginPasswordLayout.isPasswordVisibilityToggleEnabled = mBinding.etLoginPassword.text.toString().isNotEmpty()
+            }
+        }
+*/
 /*
         mUI.setContentView(this)
         //必须在AnkoComponent之外设置inputType，否则不生效
@@ -54,6 +77,7 @@ class LoginActivity : BaseActivity(), AnkoLogger {
         toast("dfasdfasdf")
     }
 
+/*
     private fun attemptLogin() {
         if(mUI.etUsername.text.isNullOrBlank()) {
             mUI.etUsername.error = getString(R.string.hub_error_field_required)
@@ -89,7 +113,9 @@ class LoginActivity : BaseActivity(), AnkoLogger {
                 }
         )
     }
+*/
 
+/*
 class LoginActivityUI: AnkoComponent<LoginActivity> {
     lateinit var etUsername: EditText
     lateinit var etPassword: TextInputEditText
@@ -145,6 +171,7 @@ class LoginActivityUI: AnkoComponent<LoginActivity> {
         }.applyRecursively(customStyle)
     }.view
 }
+*/
 
 }
 
