@@ -49,23 +49,20 @@ class LoginActivity : BaseActivity(), AnkoLogger {
         mBinding.etLoginPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
 */
 
-/*
-        mBinding.etLoginPassword.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                attemptLogin()
-
-                return@OnEditorActionListener true
-            }
-            false
-        })
-*/
-/*
-        mBinding.etLoginPassword.textChangedListener {
-            afterTextChanged {
-//                mBinding.etLoginPasswordLayout.isPasswordVisibilityToggleEnabled = mBinding.etLoginPassword.text.toString().isNotEmpty()
+        mBinding.etLoginPassword.setOnEditorActionListener { view: TextView, actionId, _ ->
+            if (actionId == R.integer.login_action_id || actionId == EditorInfo.IME_NULL) {
+                onClickLogin(view)
+                return@setOnEditorActionListener true
+            } else{
+                return@setOnEditorActionListener false
             }
         }
-*/
+
+        mBinding.etLoginPassword.textChangedListener {
+            afterTextChanged {
+                mBinding.etLoginPasswordLayout.isPasswordVisibilityToggleEnabled = mBinding.etLoginPassword.text.toString().isNotEmpty()
+            }
+        }
 /*
         mUI.setContentView(this)
         //必须在AnkoComponent之外设置inputType，否则不生效
@@ -74,7 +71,38 @@ class LoginActivity : BaseActivity(), AnkoLogger {
     }
 
     fun onClickLogin(view: View) {
-        toast("dfasdfasdf")
+        if(mBinding.etLoginUsername.text.isNullOrBlank()) {
+            mBinding.etLoginUsername.error = getString(R.string.hub_error_field_required)
+            mBinding.etLoginUsername.requestFocus()
+            return
+        }
+        if(mBinding.etLoginPassword.text.isNullOrBlank()) {
+            mBinding.etLoginPassword.error = getString(R.string.hub_error_field_required)
+            mBinding.etLoginPassword.requestFocus()
+            return
+        }
+        prefTokenAuth = ""
+        prefLoginSuccessful = false
+        prefBasicAuth = Credentials.basic(mBinding.etLoginUsername.text.toString(), mBinding.etLoginPassword.text.toString())
+        apiService.postAuthorizations().flatMap {
+            prefTokenAuth = it.token
+            apiService.getCurrentUser()
+        }.schedule().subscribeBy(
+                onNext = {
+                    var prefUsername : String by Preference(this, PrefProperty.USERNAME,  "")
+                    prefUsername = it.login
+                    var prefAvatar : String by Preference(this, PrefProperty.USER_AVATAR,  "")
+                    prefAvatar = it.avatar_url
+                    prefLoginSuccessful = true
+                    toast(String.format(getString(R.string.hub_toast_login_successful), prefUsername))
+                    finish()
+                },onError = {
+            mBinding.etLoginUsername.requestFocus()
+            if(it is HttpException) {
+                toast("${it.getErrResponse()?.body?.message}")
+            }
+        }
+        )
     }
 
 /*

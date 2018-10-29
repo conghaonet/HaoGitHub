@@ -13,31 +13,33 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
+                    android:id="@+id/et_login_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hub_prompt_username"
+                    android:text="conghaonet@gmail.com"
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"/>
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/et_login_password_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/tiet_password"
+                    android:id="@+id/et_login_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
-                    android:inputType="textPassword|textVisiblePassword"
+                    android:inputType="textPassword"
+                    android:imeActionId="@integer/login_action_id"
+                    android:imeActionLabel="@string/hub_action_sign_in_short"
                     android:hint="@string/hub_prompt_password"/>
             </android.support.design.widget.TextInputLayout>
-
             <Button
-                android:id="@+id/dasfdasf_aa"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/hub_action_sign_in"
