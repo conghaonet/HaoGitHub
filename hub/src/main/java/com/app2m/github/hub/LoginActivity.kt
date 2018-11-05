@@ -19,8 +19,8 @@ import okhttp3.Credentials
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.textInputEditText
 import org.jetbrains.anko.design.textInputLayout
-import org.jetbrains.anko.sdk25.coroutines.onClick
-import org.jetbrains.anko.sdk25.coroutines.textChangedListener
+import org.jetbrains.anko.sdk27.coroutines.onClick
+import org.jetbrains.anko.sdk27.coroutines.textChangedListener
 import retrofit2.HttpException
 /**
  * A login screen that offers login via email/password.

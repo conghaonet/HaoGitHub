@@ -13,8 +13,8 @@ set min=%time:~3,2%
 set sec=%time:~6,2%
 set datetime=%year%%month%%day%-%hour%%min%%sec%
 
-REM gradlew :app:dependencies >tree_all_%datetime%.txt
-gradlew :app:dependencies --configuration debugCompileClasspath >tree_debugCompile_%datetime%.txt
+gradlew :app:dependencies >tree_all_%datetime%.txt
+REM gradlew :app:dependencies --configuration debugCompileClasspath >tree_debugCompile_%datetime%.txt
 REM gradlew :app:dependencies --configuration debugAndroidTestCompileClasspath >tree_debugAndroidTestCompile_%datetime%.txt
 REM gradlew :app:dependencies --configuration debugAndroidTestRuntimeClasspath >tree_debugAndroidTestRuntime_%datetime%.txt
 REM gradlew :app:dependencies --configuration debugAnnotationProcessorClasspath >tree_debugAnnotationProcessor_%datetime%.txt

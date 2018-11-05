@@ -11,7 +11,7 @@ import com.app2m.github.hub.R
 import com.app2m.github.network.PrefProperty
 import com.app2m.github.network.Preference
 import org.jetbrains.anko.*
-import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.sdk27.coroutines.onClick
 
 class HomeHeaderUI: AnkoComponent<HomeActivity>, AnkoLogger {
     private lateinit var loginButton: Button

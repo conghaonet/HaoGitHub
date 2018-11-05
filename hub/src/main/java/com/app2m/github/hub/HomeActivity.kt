@@ -20,7 +20,7 @@ import org.jetbrains.anko.support.v4.drawerLayout
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
-import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.sdk27.coroutines.onClick
 
 class HomeActivity: BaseActivity() {
     val homeActivityUI = HomeActivityUI()

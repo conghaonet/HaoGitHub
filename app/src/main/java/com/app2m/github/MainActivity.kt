@@ -14,7 +14,7 @@ import io.reactivex.*
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import org.jetbrains.anko.*
-import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.support.v4.nestedScrollView
 
 class MainActivity : AppCompatActivity(), AnkoLogger {
