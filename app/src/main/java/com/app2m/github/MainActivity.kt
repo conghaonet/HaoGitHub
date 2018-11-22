@@ -8,6 +8,7 @@ import android.view.Menu
 import android.widget.Button
 import android.widget.LinearLayout
 import com.app2m.github.hub.HomeActivity
+import com.app2m.github.hub.banner.BannerActivity
 import com.app2m.github.hub.ext.themeSupportToolbar
 import com.app2m.github.network.schedule
 import io.reactivex.*
@@ -28,7 +29,9 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        startActivity<HomeActivity>()
+        startActivity<BannerActivity>()
+//        startActivity<HomeActivity>()
+
     }
 
     fun tryObservable() {
