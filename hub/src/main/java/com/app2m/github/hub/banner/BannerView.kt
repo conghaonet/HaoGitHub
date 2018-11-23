@@ -6,14 +6,21 @@ import android.os.Build
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.Toast
 import com.app2m.github.hub.R
+import com.app2m.github.network.schedule
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.banner_item.view.*
+import org.jetbrains.anko.recyclerview.v7.recyclerView
 import java.lang.ref.WeakReference
+import java.util.concurrent.TimeUnit
 
+private const val TAG ="BannerView"
 class BannerView: RelativeLayout {
     private var weakReference: WeakReference<Context> = WeakReference(context)
     private var viewPager: ViewPager = ViewPager(context)
@@ -44,6 +51,22 @@ class BannerView: RelativeLayout {
             viewPager.currentItem = 1
         }
         adapter.notifyDataSetChanged()
+        var disposable = Observable.interval(3,3, TimeUnit.SECONDS).schedule().subscribeBy(
+                onNext = {
+                    var currentIndex = viewPager.currentItem
+                    if(++currentIndex < adapter.count) {
+                        viewPager.setCurrentItem(currentIndex, true)
+                    }
+/*
+                    if(++currentIndex == adapter.count) {
+                        viewPager.setCurrentItem(2, false)
+                    } else {
+                        viewPager.setCurrentItem(currentIndex, true)
+                    }
+*/
+                }, onError = {
+                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                })
     }
     private fun setLogicPosition(items: List<BannerItem>) {
         for (i in items.indices) {
@@ -52,12 +75,19 @@ class BannerView: RelativeLayout {
     }
     private inner class MyOnPageChangeListener: ViewPager.OnPageChangeListener {
         override fun onPageSelected(position: Int) {
+            Log.d(TAG, "onPageSelected    position=$position")
         }
 
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            if (position==0 && positionOffsetPixels==0) {
+                viewPager.setCurrentItem(adapter.items.size - 2, false)
+            } else if(position == adapter.items.size - 1 && positionOffsetPixels == 0) {
+                viewPager.setCurrentItem(1, false)
+            }
         }
 
         override fun onPageScrollStateChanged(state: Int) {
+            Log.d(TAG, "onPageScrollStateChanged    state=$state")
         }
     }
 
@@ -80,10 +110,10 @@ class BannerView: RelativeLayout {
                 Toast.makeText(context, "index=$position", Toast.LENGTH_SHORT).show()
                 if ((position + 1) < items.size) {
 //                    bannerScroller.myDuration = 500
-                    (container as ViewPager).setCurrentItem(position + 1, true)
+//                    (container as ViewPager).setCurrentItem(position + 1, true)
                 } else {
 //                    bannerScroller.myDuration = 0
-                    (container as ViewPager).setCurrentItem(0, false)
+//                    (container as ViewPager).setCurrentItem(0, false)
 //                    this.notifyDataSetChanged()
                 }
             }
