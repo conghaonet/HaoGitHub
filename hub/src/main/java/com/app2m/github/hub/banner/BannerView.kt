@@ -79,15 +79,23 @@ class BannerView: RelativeLayout {
         }
 
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            Log.d(TAG, "onPageScrolled    position=$position  positionOffsetPixels=$positionOffsetPixels")
+/*
             if (position==0 && positionOffsetPixels==0) {
                 viewPager.setCurrentItem(adapter.items.size - 2, false)
             } else if(position == adapter.items.size - 1 && positionOffsetPixels == 0) {
                 viewPager.setCurrentItem(1, false)
             }
+*/
         }
 
         override fun onPageScrollStateChanged(state: Int) {
             Log.d(TAG, "onPageScrollStateChanged    state=$state")
+            if (viewPager.currentItem==0 && state==0) {
+                viewPager.setCurrentItem(adapter.items.size - 2, false)
+            } else if(viewPager.currentItem == adapter.items.size - 1 && state == 0) {
+                viewPager.setCurrentItem(1, false)
+            }
         }
     }
 
