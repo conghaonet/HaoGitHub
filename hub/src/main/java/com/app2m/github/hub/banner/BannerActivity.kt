@@ -55,6 +55,9 @@ class BannerActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
     inner class MyPagerAdapter(val context: Context, var items: MutableList<String>): PagerAdapter() {
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {

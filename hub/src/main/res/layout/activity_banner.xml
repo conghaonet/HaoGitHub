@@ -11,16 +11,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="#0000ff"
         tools:context=".banner.BannerActivity">
         <android.support.v4.view.ViewPager
             android:id="@+id/vp"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:visibility="gone"
             android:background="#ee0000"/>
         <com.app2m.github.hub.banner.BannerView
             android:id="@+id/bannerView"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="#00ee00"/>
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/banner_indicator_selected"/>
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/banner_indicator_unselected"/>
     </LinearLayout>
 </layout>

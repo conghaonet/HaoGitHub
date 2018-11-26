@@ -3,6 +3,7 @@ package com.app2m.github.hub.banner
 import android.annotation.TargetApi
 import android.content.Context
 import android.os.Build
+import android.os.Parcelable
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
@@ -11,13 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.widget.RelativeLayout
-import android.widget.Scroller
 import android.widget.Toast
 import com.app2m.github.hub.R
 import com.app2m.github.network.schedule
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.banner_item.view.*
 import java.lang.ref.WeakReference
 import java.lang.reflect.Field
@@ -26,14 +27,12 @@ import java.util.concurrent.TimeUnit
 private const val TAG ="BannerView"
 private const val SCROLLER_DURATION = 500
 class BannerView: RelativeLayout {
-    private var weakReference: WeakReference<Context> = WeakReference(context)
-    private var viewPager: ViewPager = ViewPager(context)
-    private var adapter = BannerItemAdapter()
+    private val weakContext: WeakReference<Context> = WeakReference(context)
+    private val viewPager: ViewPager = ViewPager(context)
+    private val adapter = BannerItemAdapter()
     private var disposable : Disposable? = null
     var isLoop = true
-    private val bannerScroller: BannerScroller by lazy {
-        BannerScroller(context, AccelerateInterpolator())
-    }
+    private val bannerScroller: BannerScroller
     private val scrollerField: Field by lazy {
         val field = ViewPager::class.java.getDeclaredField("mScroller")
         field.isAccessible = true
@@ -50,6 +49,7 @@ class BannerView: RelativeLayout {
         val viewPagerLayoutParams: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         viewPager.addOnPageChangeListener(MyOnPageChangeListener())
         this.viewPager.adapter = adapter
+        bannerScroller = BannerScroller(context, AccelerateInterpolator())
         bannerScroller.myDuration = SCROLLER_DURATION
         scrollerField.set(viewPager, bannerScroller)
         this.addView(viewPager, viewPagerLayoutParams)
@@ -78,13 +78,13 @@ class BannerView: RelativeLayout {
     private fun startAutoPlay() : Disposable {
         return Observable.interval(3,3, TimeUnit.SECONDS).take(1).schedule().subscribeBy(
                 onNext = {
-                    var currentIndex = viewPager.currentItem
-                    if(++currentIndex < adapter.count) {
-                        viewPager.setCurrentItem(currentIndex, true)
+                    weakContext.get()?.let {
+                        var currentIndex = viewPager.currentItem
+                        if(++currentIndex < adapter.count) {
+                            viewPager.setCurrentItem(currentIndex, true)
+                        }
                     }
-                }, onError = {
-            Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
-        })
+                })
     }
 
     private inner class MyOnPageChangeListener: ViewPager.OnPageChangeListener {
@@ -96,17 +96,9 @@ class BannerView: RelativeLayout {
             Log.d(TAG, "onPageScrolled    position=$position  positionOffsetPixels=$positionOffsetPixels")
             if(disposable != null) {
                 disposable!!.dispose()
-
             } else {
                 disposable = startAutoPlay()
             }
-/*
-            if (position==0 && positionOffsetPixels==0) {
-                viewPager.setCurrentItem(adapter.items.size - 2, false)
-            } else if(position == adapter.items.size - 1 && positionOffsetPixels == 0) {
-                viewPager.setCurrentItem(1, false)
-            }
-*/
         }
 
         override fun onPageScrollStateChanged(state: Int) {
@@ -135,13 +127,16 @@ class BannerView: RelativeLayout {
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            var view = View.inflate(context, R.layout.banner_item, null)
-            view.banner_text.text = items[position].bannerUrl
-            view.setOnClickListener{
-                Toast.makeText(context, "${it.banner_text.text} position=$position", Toast.LENGTH_SHORT).show()
+            var view: View? = null
+            weakContext.get()?.let {
+                view = View.inflate(it, R.layout.banner_item, null)
+                view?.banner_text?.text = items[position].bannerUrl
+                view?.setOnClickListener{view ->
+                    Toast.makeText(it, "${view.banner_text.text} position=$position", Toast.LENGTH_SHORT).show()
+                }
+                container.addView(view)
             }
-            container.addView(view)
-            return view
+            return view!!
         }
 
         override fun isViewFromObject(view: View, any: Any): Boolean {
@@ -158,15 +153,6 @@ class BannerView: RelativeLayout {
         }
     }
 
-    class BannerItem {
-        var bannerUrl: String
-        var actionUrl: String
-        internal var logicPosition: Int
-        @JvmOverloads
-        constructor(bannerUrl: String = "", actionUrl: String = "", logicPosition: Int = -1) {
-            this.bannerUrl = bannerUrl
-            this.actionUrl = actionUrl
-            this.logicPosition = logicPosition
-        }
-    }
+    @Parcelize
+    data class BannerItem @JvmOverloads constructor(val bannerUrl: String = "", val actionUrl: String = "", internal var logicPosition: Int = -1): Parcelable
 }

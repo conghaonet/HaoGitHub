@@ -15,7 +15,6 @@ import io.reactivex.*
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import org.jetbrains.anko.*
-import org.jetbrains.anko.sdk27.coroutines.onClick
 import org.jetbrains.anko.support.v4.nestedScrollView
 
 class MainActivity : AppCompatActivity(), AnkoLogger {
@@ -29,7 +28,7 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        startActivity<BannerActivity>()
+//        startActivity<BannerActivity>()
 //        startActivity<HomeActivity>()
 
     }
@@ -129,18 +128,23 @@ class MainActivityUI<T> : AnkoComponent<T>, AnkoLogger {
                 lparams(width = matchParent, height = matchParent)
                 verticalLayout {
                     button("GitHub Home") {
-                        onClick {
+                        setOnClickListener {
                             startActivity<HomeActivity>()
                         }
                     }
                     button("Try Observable") {
-                        onClick {
+                        setOnClickListener {
                             (owner as MainActivity).tryObservable()
                         }
                     }
                     button("Try Flowable") {
-                        onClick {
+                        setOnClickListener {
                             (owner as MainActivity).tryFlowable()
+                        }
+                    }
+                    button("BannerView") {
+                        setOnClickListener {
+                            startActivity<BannerActivity>()
                         }
                     }
                 }
