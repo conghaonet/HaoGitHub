@@ -155,4 +155,6 @@ class BannerView: RelativeLayout {
 
     @Parcelize
     data class BannerItem @JvmOverloads constructor(val bannerUrl: String = "", val actionUrl: String = "", internal var logicPosition: Int = -1): Parcelable
+
+
 }

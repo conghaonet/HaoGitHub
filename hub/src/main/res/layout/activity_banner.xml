@@ -9,21 +9,59 @@
     </data>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#0000ff"
+        android:background="#aa999999"
         tools:context=".banner.BannerActivity">
         <android.support.v4.view.ViewPager
             android:id="@+id/vp"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:visibility="gone"
+            android:layout_height="150dp"
             android:background="#ee0000"/>
-        <com.app2m.github.hub.banner.BannerView
-            android:id="@+id/bannerView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="#00ee00"/>
+            android:layout_height="150dp">
+            <com.app2m.github.hub.banner.BannerView
+                android:id="@+id/bannerView"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="#00ee00"/>
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/banner_indicator_unselected"/>
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/banner_indicator_unselected"/>
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/banner_indicator_unselected"/>
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/banner_indicator_unselected"/>
+                </LinearLayout>
+                <ImageView
+                    android:id="@+id/banner_selected"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:src="@drawable/banner_indicator_selected"/>
+            </FrameLayout>
+        </RelativeLayout>
+<!--
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -32,5 +70,6 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:src="@drawable/banner_indicator_unselected"/>
+-->
     </LinearLayout>
 </layout>

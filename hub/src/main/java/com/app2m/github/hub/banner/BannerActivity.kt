@@ -6,16 +6,20 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
+import android.widget.FrameLayout
 import android.widget.Toast
 import com.app2m.github.hub.R
 import com.app2m.github.hub.databinding.ActivityBannerBinding
 import kotlinx.android.synthetic.main.banner_item.view.*
 import java.lang.reflect.Field
 
+private const val TAG = "BannerActivity"
 class BannerActivity : AppCompatActivity() {
+    private var indicatorWidth = 0
     private val mBinding: ActivityBannerBinding by lazy {
         DataBindingUtil.setContentView<ActivityBannerBinding>(this, R.layout.activity_banner)
     }
@@ -44,6 +48,7 @@ class BannerActivity : AppCompatActivity() {
 
         var adapter = MyPagerAdapter(this, items as MutableList<String>)
         mBinding.vp.adapter = adapter
+        mBinding.vp.addOnPageChangeListener(MyOnPageChangeListener())
 //        scrollerField.set(mBinding.vp, bannerScroller)
 
         var bannerItems = mutableListOf<BannerView.BannerItem>()
@@ -58,23 +63,13 @@ class BannerActivity : AppCompatActivity() {
     override fun onBackPressed() {
         finish()
     }
+
     inner class MyPagerAdapter(val context: Context, var items: MutableList<String>): PagerAdapter() {
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
 //            return super.instantiateItem(container, position)
             var view = View.inflate(context, R.layout.banner_item, null)
-            view.banner_text.text = "index = $position"
-            view.setOnClickListener{
-                Toast.makeText(context, "index=$position", Toast.LENGTH_SHORT).show()
-                if ((position + 1) < items.size) {
-                    bannerScroller.myDuration = 500
-                    (container as ViewPager).setCurrentItem(position + 1, true)
-                } else {
-                    bannerScroller.myDuration = 0
-                    (container as ViewPager).setCurrentItem(0, false)
-//                    this.notifyDataSetChanged()
-                }
-            }
+            view.banner_text.text = items[position]
             container.addView(view)
             return view
         }
@@ -91,5 +86,31 @@ class BannerActivity : AppCompatActivity() {
             container.removeView(any as View)
         }
 
+    }
+
+    private inner class MyOnPageChangeListener: ViewPager.OnPageChangeListener {
+        override fun onPageSelected(position: Int) {
+            Log.d(TAG, "----onPageSelected    position=$position")
+        }
+
+        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            Log.d(TAG, "====onPageScrolled    position=$position  positionOffsetPixels=$positionOffsetPixels")
+            if(indicatorWidth<=0) {
+                indicatorWidth = mBinding.bannerSelected.width
+            }
+
+            val distanceRatio = (positionOffsetPixels + (position * mBinding.vp.width)).toFloat() / mBinding.vp.width.toFloat()
+            val layoutParams = mBinding.bannerSelected.layoutParams as FrameLayout.LayoutParams
+            layoutParams.leftMargin = (distanceRatio * indicatorWidth).toInt()
+            (mBinding.bannerSelected.parent as FrameLayout).updateViewLayout(mBinding.bannerSelected, layoutParams)
+        }
+
+        /**
+         * @param state 0:什么都没做; 1:开始滑动; 2:结束滑动;
+         */
+        override fun onPageScrollStateChanged(state: Int) {
+            Log.d(TAG, "++++onPageScrollStateChanged    state=$state")
+
+        }
     }
 }
