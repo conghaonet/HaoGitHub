@@ -54,7 +54,7 @@ class BannerIndicator @JvmOverloads constructor(val container: RelativeLayout, v
         if (weakContext.get() != null) {
             selectedIndicator?.let {
                 val distance = distanceRatio * it.width
-                if(distance <=  (size - 1) * it.width && distance >= 0) {
+                if(distance <= (size - 1) * it.width && distance >= 0) {
                     val layoutParams = it.layoutParams as FrameLayout.LayoutParams
                     layoutParams.leftMargin = distance.toInt()
                     indicatorLayout.updateViewLayout(it, layoutParams)

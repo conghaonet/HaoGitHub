@@ -1,40 +1,19 @@
 package com.app2m.github.hub.banner
 
-import android.content.Context
 import android.databinding.DataBindingUtil
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.view.PagerAdapter
-import android.support.v4.view.ViewPager
-import android.util.Log
-import android.view.View
-import android.view.ViewGroup
-import android.view.animation.AccelerateInterpolator
-import android.widget.FrameLayout
 import android.widget.Toast
 import com.app2m.github.hub.R
 import com.app2m.github.hub.databinding.ActivityBannerBinding
-import kotlinx.android.synthetic.main.banner_item.view.*
-import java.lang.reflect.Field
 
-private const val TAG = "BannerActivity"
 class BannerActivity : AppCompatActivity() {
-    private var indicatorWidth = 0
     private val mBinding: ActivityBannerBinding by lazy {
         DataBindingUtil.setContentView<ActivityBannerBinding>(this, R.layout.activity_banner)
-    }
-    private val bannerScroller: BannerScroller by lazy {
-        BannerScroller(this, AccelerateInterpolator())
-    }
-    private val scrollerField: Field by lazy {
-        val field = ViewPager::class.java.getDeclaredField("mScroller")
-        field.isAccessible = true
-        field
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_banner)
 /*
         val items = listOf(
                 "A    http://betacs.101.com/v0.1/download?dentryId=eb1c5ad9-a42e-41a1-865f-0cd2e5240dd2",
@@ -45,72 +24,21 @@ class BannerActivity : AppCompatActivity() {
                 "F    http://betacs.101.com/v0.1/download?dentryId=df7b9c15-89a3-4b26-be80-053cc04b0366")
 */
         val items = listOf("A","B","C","D")
-
-        var adapter = MyPagerAdapter(this, items as MutableList<String>)
-        mBinding.vp.adapter = adapter
-        mBinding.vp.addOnPageChangeListener(MyOnPageChangeListener())
-//        scrollerField.set(mBinding.vp, bannerScroller)
-
-        var bannerItems = mutableListOf<BannerView.BannerItem>()
+        val bannerItems = mutableListOf<BannerView.BannerItem>()
         for (item in items) {
-            var bannerItem = BannerView.BannerItem(item)
+            val bannerItem = BannerView.BannerItem(item)
             bannerItems.add(bannerItem)
         }
+        mBinding.bannerView.isLoop = true
+        mBinding.bannerView.setOnItemClickListener(object : BannerItemAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                Toast.makeText(this@BannerActivity, "position = $position", Toast.LENGTH_SHORT).show()
+            }
+        })
         mBinding.bannerView.setItems(bannerItems)
-
     }
 
     override fun onBackPressed() {
         finish()
-    }
-
-    inner class MyPagerAdapter(val context: Context, var items: MutableList<String>): PagerAdapter() {
-
-        override fun instantiateItem(container: ViewGroup, position: Int): Any {
-//            return super.instantiateItem(container, position)
-            var view = View.inflate(context, R.layout.banner_item, null)
-            view.banner_text.text = items[position]
-            container.addView(view)
-            return view
-        }
-        override fun getCount(): Int {
-            return items.size
-        }
-
-        override fun isViewFromObject(view: View, any: Any): Boolean {
-            return view == any
-        }
-
-        override fun destroyItem(container: ViewGroup, position: Int, any: Any) {
-            // super.destroyItem(container,position,object); 这一句要删除，否则报错
-            container.removeView(any as View)
-        }
-
-    }
-
-    private inner class MyOnPageChangeListener: ViewPager.OnPageChangeListener {
-        override fun onPageSelected(position: Int) {
-            Log.d(TAG, "----onPageSelected    position=$position")
-        }
-
-        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            Log.d(TAG, "====onPageScrolled    position=$position  positionOffsetPixels=$positionOffsetPixels")
-            if(indicatorWidth<=0) {
-                indicatorWidth = mBinding.bannerSelected.width
-            }
-
-            val distanceRatio = (positionOffsetPixels + (position * mBinding.vp.width)).toFloat() / mBinding.vp.width.toFloat()
-            val layoutParams = mBinding.bannerSelected.layoutParams as FrameLayout.LayoutParams
-            layoutParams.leftMargin = (distanceRatio * indicatorWidth).toInt()
-            (mBinding.bannerSelected.parent as FrameLayout).updateViewLayout(mBinding.bannerSelected, layoutParams)
-        }
-
-        /**
-         * @param state 0:什么都没做; 1:开始滑动; 2:结束滑动;
-         */
-        override fun onPageScrollStateChanged(state: Int) {
-            Log.d(TAG, "++++onPageScrollStateChanged    state=$state")
-
-        }
     }
 }
