@@ -31,6 +31,7 @@ class BannerView: RelativeLayout {
     private val viewPager: ViewPager = ViewPager(context)
     private val adapter = BannerItemAdapter()
     private var disposable : Disposable? = null
+    private lateinit var indicator: BannerIndicator
     var isLoop = true
     private val bannerScroller: BannerScroller
     private val scrollerField: Field by lazy {
@@ -46,12 +47,13 @@ class BannerView: RelativeLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int): super(context, attrs, defStyleAttr, defStyleRes)
 
     init {
-        val viewPagerLayoutParams: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        val viewPagerLayoutParams: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         viewPager.addOnPageChangeListener(MyOnPageChangeListener())
         this.viewPager.adapter = adapter
         bannerScroller = BannerScroller(context, AccelerateInterpolator())
         bannerScroller.myDuration = SCROLLER_DURATION
         scrollerField.set(viewPager, bannerScroller)
+
         this.addView(viewPager, viewPagerLayoutParams)
     }
 
@@ -66,6 +68,7 @@ class BannerView: RelativeLayout {
             viewPager.currentItem = 1
         }
         adapter.notifyDataSetChanged()
+        indicator = BannerIndicator(this, items.size)
 
     }
 
@@ -95,12 +98,23 @@ class BannerView: RelativeLayout {
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
             Log.d(TAG, "onPageScrolled    position=$position  positionOffsetPixels=$positionOffsetPixels")
             if(disposable != null) {
+                //手动滑动时，停止自动滚动banner
                 disposable!!.dispose()
             } else {
+                //bannerView初始加载时，开始自动滚动
                 disposable = startAutoPlay()
+            }
+
+            if(position > 0 && position < adapter.items.size-1) {
+                val indicatorPosition = position - 1
+                val distanceRatio = (positionOffsetPixels + (indicatorPosition * viewPager.width)).toFloat() / viewPager.width.toFloat()
+                indicator.moveSelectedIndicator(distanceRatio)
             }
         }
 
+        /**
+         * @param state 0:什么都没做; 1:开始滑动; 2:结束滑动;
+         */
         override fun onPageScrollStateChanged(state: Int) {
             Log.d(TAG, "onPageScrollStateChanged    state=$state")
             if (state == 0) {

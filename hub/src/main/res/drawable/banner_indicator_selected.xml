@@ -11,7 +11,7 @@
 
     <!--android:thicknessRatio="8" 外环厚度比率 = 图形（整体圆环）的宽度/外环的厚度 -->
 
-    <!--<size android:width="80dp" android:height="80dp" />-->
+    <size android:width="40dp" android:height="40dp" />
 
     <!--外环填充色-->
     <solid android:color="#ffffff" />
