@@ -3,7 +3,9 @@ package com.app2m.github.hub.banner
 import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
+import com.app2m.github.hub.GlideApp
 import com.app2m.github.hub.R
+import com.app2m.github.hub.glide.BackgroundViewTarget
 import kotlinx.android.synthetic.main.banner_item.view.*
 
 class BannerItemAdapter(items: List<String>, private val isLoop: Boolean): PagerAdapter() {
@@ -21,7 +23,7 @@ class BannerItemAdapter(items: List<String>, private val isLoop: Boolean): Pager
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val view = View.inflate(container.context, R.layout.banner_item, null)
         view?.let {
-            it.banner_text?.text = items[position]
+            GlideApp.with(container.context).load(items[position]).centerCrop().into(it.banner_img)
             itemClickListener?.let { listener ->
                 it.setOnClickListener{
                     if(isLoop && items.size > 1) {
@@ -31,6 +33,8 @@ class BannerItemAdapter(items: List<String>, private val isLoop: Boolean): Pager
                     }
                 }
             }
+
+
         }
         container.addView(view)
         return view!!

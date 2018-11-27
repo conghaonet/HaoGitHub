@@ -3,11 +3,9 @@ package com.app2m.github.hub.banner
 import android.annotation.TargetApi
 import android.content.Context
 import android.os.Build
-import android.os.Parcelable
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import android.util.Log
-import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.RelativeLayout
 import com.app2m.github.hub.R
@@ -15,14 +13,16 @@ import com.app2m.github.network.schedule
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
-import kotlinx.android.parcel.Parcelize
 import java.lang.ref.WeakReference
 import java.lang.reflect.Field
 import java.util.concurrent.TimeUnit
 
-private const val TAG ="BannerView"
-private const val SCROLLER_DURATION = 500
+
 class BannerView: RelativeLayout {
+    companion object {
+        private const val TAG ="BannerView"
+        private const val SCROLLER_DURATION = 500
+    }
     private val weakContext: WeakReference<Context> = WeakReference(context)
     private var disposable : Disposable? = null
     var isLoop = true
