@@ -6,25 +6,29 @@ import android.view.ViewGroup
 import com.app2m.github.hub.R
 import kotlinx.android.synthetic.main.banner_item.view.*
 
-class BannerItemAdapter: PagerAdapter {
-    val items: MutableList<BannerView.BannerItem>
-
-    constructor(): this(listOf())
-    constructor(items: List<BannerView.BannerItem>) {
-        if (items.isNullOrEmpty()) {
-            this.items = mutableListOf()
-        } else {
-            this.items = items as MutableList<BannerView.BannerItem>
+class BannerItemAdapter(items: List<String>, private val isLoop: Boolean): PagerAdapter() {
+    val items = mutableListOf<String>()
+    init {
+        if (items.isNotEmpty()) {
+            this.items.addAll(items)
+            if(isLoop && this.items.size > 1) {
+                this.items.add(0, items[items.size -1])
+                this.items.add(items[0])
+            }
         }
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val view = View.inflate(container.context, R.layout.banner_item, null)
         view?.let {
-            it.banner_text?.text = items[position].bannerUrl
+            it.banner_text?.text = items[position]
             itemClickListener?.let { listener ->
                 it.setOnClickListener{
-                    listener.onItemClick(position)
+                    if(isLoop && items.size > 1) {
+                        listener.onItemClick(position - 1)
+                    } else {
+                        listener.onItemClick(position)
+                    }
                 }
             }
         }
@@ -45,7 +49,7 @@ class BannerItemAdapter: PagerAdapter {
         container.removeView(any as View)
     }
 
-    var itemClickListener: OnItemClickListener? = null
+    private var itemClickListener: OnItemClickListener? = null
     interface OnItemClickListener {
         fun onItemClick(position: Int)
     }

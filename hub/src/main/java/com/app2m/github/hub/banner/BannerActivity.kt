@@ -23,21 +23,26 @@ class BannerActivity : AppCompatActivity() {
                 "E    http://betacs.101.com/v0.1/download?dentryId=173d0877-f334-416e-94fd-6d19c5e90674",
                 "F    http://betacs.101.com/v0.1/download?dentryId=df7b9c15-89a3-4b26-be80-053cc04b0366")
 */
-        val items = listOf("A","B","C","D")
-        val bannerItems = mutableListOf<BannerView.BannerItem>()
-        for (item in items) {
-            val bannerItem = BannerView.BannerItem(item)
-            bannerItems.add(bannerItem)
-        }
+
         mBinding.bannerView.isLoop = true
-        mBinding.bannerView.setOnItemClickListener(object : BannerItemAdapter.OnItemClickListener {
+        setBannerData(mutableListOf("A","B","C","D"))
+        mBinding.changeItems.setOnClickListener {
+            if(it.tag == null) {
+                it.tag = "abc"
+                setBannerData(mutableListOf("a","b","c"))
+            } else {
+                it.tag = null
+                setBannerData(mutableListOf("dd", "ee", "ff", "gg", "hh"))
+            }
+        }
+    }
+    private fun setBannerData(data: List<String>) {
+        mBinding.bannerView.setItems(data).setOnItemClickListener(object : BannerItemAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 Toast.makeText(this@BannerActivity, "position = $position", Toast.LENGTH_SHORT).show()
             }
         })
-        mBinding.bannerView.setItems(bannerItems)
     }
-
     override fun onBackPressed() {
         finish()
     }

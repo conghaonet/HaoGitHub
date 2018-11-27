@@ -7,6 +7,7 @@ import android.os.Parcelable
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import android.util.Log
+import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.RelativeLayout
 import com.app2m.github.network.schedule
@@ -22,10 +23,7 @@ private const val TAG ="BannerView"
 private const val SCROLLER_DURATION = 500
 class BannerView: RelativeLayout {
     private val weakContext: WeakReference<Context> = WeakReference(context)
-    private val viewPager: ViewPager = ViewPager(context)
-    private val adapter = BannerItemAdapter()
     private var disposable : Disposable? = null
-    private lateinit var indicator: BannerIndicator
     var isLoop = true
     private val bannerScroller: BannerScroller
     private val scrollerField: Field by lazy {
@@ -39,56 +37,35 @@ class BannerView: RelativeLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int): super(context, attrs, defStyleAttr)
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int): super(context, attrs, defStyleAttr, defStyleRes)
-
     init {
-        val viewPagerLayoutParams: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        viewPager.addOnPageChangeListener(MyOnPageChangeListener())
-        this.viewPager.adapter = adapter
         bannerScroller = BannerScroller(context, AccelerateInterpolator())
         bannerScroller.myDuration = SCROLLER_DURATION
-        scrollerField.set(viewPager, bannerScroller)
-
-        this.addView(viewPager, viewPagerLayoutParams)
     }
 
-    fun setItems(items: List<BannerItem>) {
-        adapter.items.clear()
-        setLogicPosition(items)
-        adapter.items.addAll(items)
+    fun setItems(items: List<String>) : BannerItemAdapter {
+        disposable?.dispose()
+        removeAllViews()
+        val viewPager = ViewPager(context)
+        val viewPagerLayoutParams: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        scrollerField.set(viewPager, bannerScroller)
+        this.addView(viewPager, viewPagerLayoutParams)
+
+        val adapter = BannerItemAdapter(items, isLoop)
+        viewPager.adapter = adapter
 
         if(isLoop && items.size > 1) {
-            adapter.items.add(0, items[items.size -1])
-            adapter.items.add(items[0])
             viewPager.currentItem = 1
         }
+        val indicator = BannerIndicator(this, items.size)
         adapter.notifyDataSetChanged()
-        indicator = BannerIndicator(this, items.size)
-
+        viewPager.addOnPageChangeListener(MyOnPageChangeListener(viewPager, adapter, indicator))
+        return adapter
     }
 
-    private fun setLogicPosition(items: List<BannerItem>) {
-        for (i in items.indices) {
-            items[i].logicPosition = i
+    private inner class MyOnPageChangeListener(val viewPager: ViewPager, val adapter: BannerItemAdapter, val indicator: BannerIndicator): ViewPager.OnPageChangeListener {
+        init {
+            disposable = null
         }
-    }
-
-    private fun startAutoPlay() : Disposable {
-        return Observable.interval(3,3, TimeUnit.SECONDS).take(1).schedule().subscribeBy(
-                onNext = {
-                    weakContext.get()?.let {
-                        var currentIndex = viewPager.currentItem
-                        if(++currentIndex < adapter.count) {
-                            viewPager.setCurrentItem(currentIndex, true)
-                        }
-                    }
-                })
-    }
-
-    fun setOnItemClickListener(listener: BannerItemAdapter.OnItemClickListener) {
-        adapter.setOnItemClickListener(listener)
-    }
-
-    private inner class MyOnPageChangeListener: ViewPager.OnPageChangeListener {
         override fun onPageSelected(position: Int) {
             Log.d(TAG, "onPageSelected    position=$position")
         }
@@ -125,12 +102,21 @@ class BannerView: RelativeLayout {
                     } else if(viewPager.currentItem == adapter.items.size - 1) {
                         viewPager.setCurrentItem(1, false)
                     }
-                    this@BannerView.disposable = startAutoPlay()
+                    disposable = startAutoPlay()
                 }
             }
         }
+        private fun startAutoPlay() : Disposable {
+            return Observable.interval(3,3, TimeUnit.SECONDS).take(1).schedule().subscribeBy(
+                    onNext = {
+                        weakContext.get()?.let {
+                            var currentIndex = viewPager.currentItem
+                            if(++currentIndex < adapter.count) {
+                                viewPager.setCurrentItem(currentIndex, true)
+                            }
+                        }
+                    })
+        }
     }
 
-    @Parcelize
-    data class BannerItem @JvmOverloads constructor(val bannerUrl: String = "", val actionUrl: String = "", internal var logicPosition: Int = -1): Parcelable
 }

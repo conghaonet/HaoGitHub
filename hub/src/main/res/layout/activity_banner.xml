@@ -61,6 +61,11 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:background="#00ee00"/>
+        <Button
+            android:id="@+id/changeItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="change items"/>
 <!--
         <ImageView
             android:layout_width="80dp"
