@@ -4,14 +4,14 @@
     android:shape="ring"
     android:useLevel="false"
     android:innerRadius="0dp"
-    android:thicknessRatio="2">
+    android:thicknessRatio="4">
     <!--android:useLevel="false"必须是false-->
 
     <!--android:innerRadius="32dp" 内圆半径长度，等于0时可以实现实心圆的效果。-->
 
     <!--android:thicknessRatio="8" 外环厚度比率 = 图形（整体圆环）的宽度/外环的厚度 -->
 
-    <size android:width="40dp" android:height="40dp" />
+    <size android:width="20dp" android:height="20dp" />
 
     <!--外环填充色-->
     <solid android:color="#ffffff" />

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <shape xmlns:android="http://schemas.android.com/apk/res/android"
-        android:shape="ring"
-        android:useLevel="false"
-        android:innerRadiusRatio="2.5"
-        android:thicknessRatio="10">
-        <!--android:useLevel="false"必须是false-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="ring"
+    android:useLevel="false"
+    android:innerRadius="0dp"
+    android:thicknessRatio="4">
+    <!--android:useLevel="false"必须是false-->
 
-        <!--android:innerRadiusRatio="4" 内圆半径比率 = 图形（整体圆环）的宽度/内圆半径。
-        如果innerRadiusRatio>="2"，则内圆必然充满整个图形，外环将无法完整显示。-->
+    <!--android:innerRadiusRatio="4" 内圆半径比率 = 图形（整体圆环）的宽度/内圆半径。
+    如果innerRadiusRatio>="2"，则内圆必然充满整个图形，外环将无法完整显示。-->
 
-        <!--android:thicknessRatio="8" 外环厚度比率 = 图形（整体圆环）的宽度/外环的厚度 -->
-
-        <size android:width="40dp" android:height="40dp" />
+    <!--android:thicknessRatio="8" 外环厚度比率 = 图形（整体圆环）的宽度/外环的厚度 -->
+    <size android:width="20dp" android:height="20dp" />
     <!--外环填充色-->
-    <solid android:color="#ffffff" />
+    <solid android:color="#99ffffff" />
 </shape>
