@@ -24,7 +24,7 @@ class BannerActivity : AppCompatActivity() {
                 "F    http://betacs.101.com/v0.1/download?dentryId=df7b9c15-89a3-4b26-be80-053cc04b0366")
 */
 
-        mBinding.bannerView.isLoop = true
+//        mBinding.bannerView.isLoop = true
         setBannerData(mutableListOf("A","B","C","D"))
         mBinding.changeItems.setOnClickListener {
             if(it.tag == null) {

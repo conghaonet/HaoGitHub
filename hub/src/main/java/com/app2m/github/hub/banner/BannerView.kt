@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.RelativeLayout
+import com.app2m.github.hub.R
 import com.app2m.github.network.schedule
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -33,10 +34,22 @@ class BannerView: RelativeLayout {
     }
 
     constructor(context: Context): super(context)
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int): super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet): super(context, attrs) {
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.BannerView)
+        isLoop = typedArray.getBoolean(R.styleable.BannerView_bannerIsLoop, true)
+        typedArray.recycle()
+    }
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int): super(context, attrs, defStyleAttr) {
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.BannerView)
+        isLoop = typedArray.getBoolean(R.styleable.BannerView_bannerIsLoop, true)
+        typedArray.recycle()
+    }
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int): super(context, attrs, defStyleAttr, defStyleRes)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int): super(context, attrs, defStyleAttr, defStyleRes) {
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.BannerView)
+        isLoop = typedArray.getBoolean(R.styleable.BannerView_bannerIsLoop, true)
+        typedArray.recycle()
+    }
     init {
         bannerScroller = BannerScroller(context, AccelerateInterpolator())
         bannerScroller.myDuration = SCROLLER_DURATION
